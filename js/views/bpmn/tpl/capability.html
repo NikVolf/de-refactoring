@@ -1,0 +1,138 @@
+<g class="dev-activity dev-activity-capability dev-activity-capability-{{kind}} dev-activity-capability-{{linkedObjectType}} js-activity-resize-root-y"
+   transform="{{dimScaleY}}">
+    {{#if isGhost}}
+    <g opacity="0.2">
+        <polygon vector-effect="non-scaling-stroke"
+                 fill="blue"
+                 points="0,0 -15,0 0,50"
+                 stroke="none">
+        </polygon>
+        <polygon vector-effect="non-scaling-stroke"
+                 fill="blue"
+                 points="0,100 -15,100 0,50"
+                 stroke="none">
+        </polygon>
+        <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+            <polygon vector-effect="non-scaling-stroke"
+                     fill="blue"
+                     points="0,0 15,50 0,100"
+                     stroke="none">
+            </polygon>
+        </g>
+    </g>
+    {{else}}
+    <polygon vector-effect="non-scaling-stroke"
+             fill="#fff"
+             points="0,0 -15,0 0,50"
+             stroke="#fff"
+             stroke-width="2.5px"
+             class="js-activity-shape">
+    </polygon>
+    <polygon vector-effect="non-scaling-stroke"
+             fill="#fff"
+             points="0,100 -15,100 0,50"
+             stroke="#fff"
+             stroke-width="2.5px"
+             class="js-activity-shape">
+    </polygon>
+    <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+        <polygon vector-effect="non-scaling-stroke"
+                 fill="#fff"
+                 points="0,0 15,50 0,100"
+                 stroke="#fff"
+                 stroke-width="2.5px"
+                 class="js-activity-shape">
+        </polygon>
+    </g>
+    {{/if}}
+</g>
+
+<g class="architecture dev-activity dev-activity-capability dev-activity-capability-{{kind}} dev-activity-capability-{{linkedObjectType}} js-activity-resize-root"
+   transform="{{dimScale}}">
+
+    {{#if isGhost}}
+    <rect x="0" y="0" width="100" height="100" vector-effect="non-scaling-stroke" stroke="none"
+          fill="blue" opacity="0.2"></rect>
+    {{else}}
+
+    <rect x="0" y="0" width="100" height="100" stroke="#fff"
+          stroke-width="2.5px" fill="#fff"
+          class="js-activity-shape"></rect>
+    {{/if}}
+
+    <line x1="0" y1="0" x2="100" y2="0" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+    <line x1="0" y1="100" x2="100" y2="100" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+
+    {{#unless isGhost}}
+    <g class="js-activity-resizers">
+        <polygon class="svg-resizer svg-north-resizer js-north-resizer js-resizer"
+                 points="10,-5 100,-5 100,5 10,5">
+        </polygon>
+        <polygon class="svg-resizer svg-south-resizer js-south-resizer js-resizer"
+                 points="0,95 90,95 90,105 0,105">
+        </polygon>
+
+    </g>
+    {{/unless}}
+
+</g>
+
+<g class="architecture dev-activity dev-activity-capability dev-activity-capability-{{kind}} dev-activity-capability-{{linkedObjectType}} js-activity-resize-root-y"
+   transform="{{dimScaleY}}">
+    <line x1="0" y1="0" x2="-15" y2="0" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+    <line x1="-15" y1="0" x2="0" y2="50" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+    <line x1="0" y1="50" x2="-15" y2="100" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+    <line x1="-15" y1="100" x2="0" y2="100" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+
+    <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+        <line x1="0" y1="0" x2="15" y2="50" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+        <line x1="15" y1="50" x2="0" y2="100" vector-effect="non-scaling-stroke" class="architecture_l js-activity-shape"></line>
+    </g>
+
+    {{#unless isGhost}}
+
+    <circle class="svg-resizer svg-west-resizer js-west-resizer js-resizer"
+            cx="-5"
+            cy="50"
+            r="30">
+    </circle>
+    <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+        <circle class="svg-resizer svg-east-resizer js-east-resizer js-resizer"
+                cx="5"
+                cy="50"
+                r="30">
+        </circle>
+    </g>
+    {{/unless}}
+</g>
+
+
+{{#if isProcess}}
+<g class="activity-icon js-activity-shape" transform="translate(20, 5)">
+    <path fill-rule="evenodd" fill="#71777b" transform="translate(-17, 0)"
+          d="M11,16H7v-2H6v3h1v0l4,0v1h6v-5h-6V16z M11,3v1L7,4v0H6v3h1V5h4v3h6V3H11z M10,10.5 L6.5,7L3,10.5L6.5,14L10,10.5z"></path>
+</g>
+{{/if}}
+
+{{#if isGroup}}
+<g class="activity-icon js-activity-shape" transform="translate(20, 5)">
+    <rect transform="translate(-14, 10)" stroke="#71777b" stroke-width="2" fill="white" x="-2" y="-10" width="20"
+          height="20"></rect>
+    <line transform="translate(-14, 10)" stroke="#71777b" stroke-width="2" x1="0" y1="0" x2="16" y2="0"></line>
+    <line transform="translate(-14, 10)" stroke="#71777b" stroke-width="2" x1="8" y1="-8" x2="8" y2="8"></line>
+</g>
+{{/if}}
+
+{{#if isCase}}
+<g class="activity-icon js-activity-shape" transform="translate(20, 5)">
+    <path transform="translate(-17, 0)" fill-rule="evenodd" fill="#71777b"
+          d="M15,7.5h-2v-3H7v3H5c-0.6,0-1,0.4-1,1v6c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1v-6 C16,7.9,15.6,7.5,15,7.5z M8,7.5v-2h4v2H8z"></path>
+</g>
+{{/if}}
+
+{{#if isProject}}
+<g class="activity-icon js-activity-shape" transform="translate(0, 5)">
+    <path fill-rule="evenodd" fill="#71777b" d="M12,5H5v2h7V5z M7,9v2h10V9H7z M3,15h12v-2H3V15z"></path>
+</g>
+{{/if}}
+

@@ -1,0 +1,269 @@
+<g class="dev-activity dev-activity-resource js-activity-resize-root-y{{#if isGhost}} dev-activity-ghost{{/if}}"
+   transform="{{dimScaleY}}">
+    {{#if isGhost}}
+    <g opacity="0.2">
+        <polygon vector-effect="non-scaling-stroke"
+                 fill="blue"
+                 points="0,0 -15,100 0,100"
+                 stroke="none">
+        </polygon>
+        <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+            <polygon vector-effect="non-scaling-stroke"
+                     fill="blue"
+                     points="0,0 15,0 0,100"
+                     stroke="none">
+            </polygon>
+        </g>
+    </g>
+    {{else}}
+    <polygon vector-effect="non-scaling-stroke"
+             fill="#fff"
+             points="0,0 -15,100 0,100"
+             stroke="#fff"
+             stroke-width="2.5px"
+             class="js-activity-shape">
+    </polygon>
+    <g transform="translate({{size.width}}, 0)" class="js-activit   y-right-zone">
+        <polygon vector-effect="non-scaling-stroke"
+                 fill="#fff"
+                 points="0,0 15,0 0,100"
+                 stroke="#fff"
+                 stroke-width="2.5px"
+                 class="js-activity-shape">
+        </polygon>
+    </g>
+    {{/if}}
+</g>
+
+<g class="architecture dev-activity dev-activity-resource js-activity-resize-root"
+   transform="{{dimScale}}">
+
+    {{#if isGhost}}
+    <rect x="0" y="0" width="100" height="100" vector-effect="non-scaling-stroke" stroke="none"
+          fill="blue" opacity="0.2"></rect>
+    {{else}}
+    <rect x="0" y="0" width="100" height="100" stroke="#fff"
+          stroke-width="2.5px" fill="#fff"
+          class="js-activity-shape"></rect>
+    {{/if}}
+
+    <line x1="0" y1="0" x2="100" y2="0" vector-effect="non-scaling-stroke" class="architecture_l"></line>
+    <line x1="0" y1="100" x2="100" y2="100" vector-effect="non-scaling-stroke" class="architecture_l"></line>
+
+    {{#unless isGhost}}
+    <g class="js-activity-resizers">
+        <polygon class="resizer north-resizer js-north-resizer js-resizer"
+                 points="10,-5 100,-5 100,5 10,5">
+        </polygon>
+        <polygon class="resizer south-resizer js-south-resizer js-resizer"
+                 points="0,95 90,95 90,105 0,105">
+        </polygon>
+    </g>
+    {{/unless}}
+</g>
+
+<g class="architecture dev-activity dev-activity-resource js-activity-resize-root-y"
+   transform="{{dimScaleY}}">
+    <line x1="0" y1="0" x2="-15" y2="100" vector-effect="non-scaling-stroke" class="architecture_l"></line>
+    <line x1="-15" y1="100" x2="0" y2="100" vector-effect="non-scaling-stroke" class="architecture_l"></line>
+
+    {{#unless isGhost}}
+    <polygon class="resizer west-resizer js-west-resizer js-resizer"
+             points="-5,10 5,10 -10,90 -20,90">
+    </polygon>
+    <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+        <polygon class="resizer east-resizer js-east-resizer js-resizer"
+                 points="10,10 20,10 5,90 -5,90">
+        </polygon>
+    </g>
+    {{/unless}}
+
+    <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+        <line x1="0" y1="0" x2="15" y2="0" vector-effect="non-scaling-stroke" class="architecture_l"></line>
+        <line x1="15" y1="0" x2="0" y2="100" vector-effect="non-scaling-stroke" class="architecture_l"></line>
+    </g>
+</g>
+
+{{#unless isGhost}}
+
+<g class="dev-activity-connectors js-activity-connectors">
+    <g class="dev-activity-connectors-vertical js-activity-resize-root-y" transform="{{dimScaleY}}">
+        <g transform="translate({{size.width}}, 0)" class="js-activity-right-zone">
+
+            <g transform="translate(0, 0)">
+                <circle r="4" cx="18" cy="0" fill="#fff" index="16"
+                        transform="{{dimScaleAY}}"
+                        alignment="right" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="18" cy="0" fill="#fff" index="16"
+                        transform="{{dimScaleAY}}"
+                        alignment="right" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+            <g transform="translate(0, 25)">
+                <circle r="4" cx="14.25" cy="0" fill="#fff" index="18"
+                        transform="{{dimScaleAY}}"
+                        alignment="right" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="14.25" cy="0" fill="#fff" index="18"
+                        transform="{{dimScaleAY}}"
+                        alignment="right" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+            <g transform="translate(0, 50)">
+                <circle r="4" cx="10.5" cy="0" fill="#fff" index="20"
+                        transform="{{dimScaleAY}}"
+                        alignment="right" stroke="#64aad0" stroke-width="1px" charge="-1" preferred-out="true"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+
+                <circle r="7" cx="10.5" cy="0" fill="#fff" index="20"
+                        transform="{{dimScaleAY}}"
+                        preferred-out="true"
+                        alignment="right" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+            <g transform="translate(0, 75)">
+                <circle r="4" cx="6.75" cy="0" fill="#fff" index="22"
+                    transform="{{dimScaleAY}}"
+                    alignment="right" stroke="#64aad0" stroke-width="1px" charge="-1"
+                    class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="6.75" cy="0" fill="#fff" index="22"
+                    transform="{{dimScaleAY}}"
+                    alignment="right" opacity="0" charge="-1"
+                    class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+            <g transform="translate(0, 100)">
+                <circle r="4" cx="3" cy="0" fill="#fff" index="25"
+                        transform="{{dimScaleAY}}"
+                        alignment="right" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="3" cy="0" fill="#fff" index="25"
+                        transform="{{dimScaleAY}}"
+                        alignment="right" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+        </g>
+
+        <g class="js-activity-left-zone">
+            <g transform="translate(0, 0)">
+                <circle r="4" cx="-3" cy="0" fill="#fff" index="2"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="-3" cy="0" fill="#fff" index="2"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+            <g transform="translate(0, 25)">
+                <circle r="4" cx="-6.75" cy="0" fill="#fff" index="5"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="-6.75" cy="0" fill="#fff" index="5"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+            <g transform="translate(0, 50)">
+                <circle r="4" cx="-10.5" cy="0" fill="#fff" index="10"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        preferred-in="true"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+
+                <circle r="7" cx="-10.5" cy="0" fill="#fff" index="10"
+                        axis-attractor="x"
+                        transform="{{dimScaleAY}}"
+                        preferred-out="true"
+                        alignment="left" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+            <g transform="translate(0, 75)">
+                <circle r="4" cx="-14.25" cy="0" fill="#fff" index="12"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="-14.25" cy="0" fill="#fff" index="12"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+            <g transform="translate(0, 100)">
+                <circle r="4" cx="-18" cy="0" fill="#fff" index="14"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-y"></circle>
+                <circle r="7" cx="-18" cy="0" fill="#fff" index="14"
+                        transform="{{dimScaleAY}}"
+                        alignment="left" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-y"></circle>
+            </g>
+
+        </g>
+
+    </g>
+
+    <g class="dev-activity-connectors-horizontal js-activity-resize-root-x" transform="{{dimScaleX}}">
+        <g class="js-activity-top-zone">
+            <g transform="translate(50, 0)">
+                <g class="js-diagram-connector" cx="-7.5" cy="-3" alignment="top" index="40" charge="-1" transform="translate(-7.5, -3)">
+                    <circle r="4"
+                            cx="0"
+                            cy="0"
+                            transform="{{dimScaleAX}}"
+                            class="when-flow-drag dev-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-x"></circle>
+                    <circle r="7"
+                            cx="0"
+                            cy="0"
+                            transform="{{dimScaleAX}}"
+                            opacity="0"
+                            class="dev-diagram-connector js-activity-resize-root-anti-x"></circle>
+                </g>
+
+                <circle r="4" cx="7.5" cy="-3" fill="#fff" index="60"
+                        transform="{{dimScaleAX}}"
+                        alignment="top" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-x"></circle>
+                <circle r="7" cx="7.5" cy="-3" fill="#fff" index="60"
+                        axis-attractor="y"
+                        transform="{{dimScaleAX}}"
+                        alignment="top" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-x"></circle>
+            </g>
+        </g>
+
+        <g class="js-activity-bottom-zone" transform="translate(0, {{size.height}})">
+            <g transform="translate(50, 0)">
+                <circle r="4" cx="-7.5" cy="3" fill="#fff" index="50"
+                        transform="{{dimScaleAX}}"
+                        alignment="bottom" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-x"></circle>
+                <circle r="7" cx="-7.5" cy="3" fill="#fff" index="50"
+                        transform="{{dimScaleAX}}"
+                        alignment="top" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-x"></circle>
+
+                <circle r="4" cx="7.5" cy="3" fill="#fff" index="70"
+                        transform="{{dimScaleAX}}"
+                        alignment="bottom" stroke="#64aad0" stroke-width="1px" charge="-1"
+                        class="when-flow-drag dev-diagram-connector js-diagram-connector js-diagram-connector-visible js-activity-resize-root-anti-x"></circle>
+                <circle r="7" cx="7.5" cy="3" fill="#fff" index="70"
+                        transform="{{dimScaleAX}}"
+                        alignment="top" opacity="0" charge="-1"
+                        class="js-diagram-connector dev-diagram-connector js-activity-resize-root-anti-x"></circle>
+            </g>
+        </g>
+    </g>
+
+</g>
+
+{{/unless}}

@@ -1,0 +1,68 @@
+<g class="dev-activity-event dev-activity-{{type}} dev-activity-event-mounted{{#if isInterrupting}} dev-activity-event-mounted-interrupting{{/if}}">
+
+    <circle class="diagram-activity-background"
+            cx="0"
+            cy="0"
+            r="16">
+    </circle>
+
+    <circle class="dev-event-outer-circle js-activity-shape"
+            cx="0"
+            cy="0"
+            r="16">
+    </circle>
+
+    <circle class="dev-activity-event-{{kind}} dev-event-inner-circle js-activity-shape"
+            cx="0"
+            cy="0"
+            r="12">
+    </circle>
+
+    {{#if isTimer}}
+    <path class="event-icon event-icon_{{kind}}  js-activity-shape"
+          transform="translate(-8, -8), scale (0.8)"
+          d="M10,1c5,0,9,4,9,9s-4,9-9,9s-9-4-9-9S5,1,10,1 M10,0C4.5,0,0,4.5,0,10s4.5,10,10,10c5.5,0,10-4.5,10-10S15.5,0,10,0L10,0z">
+
+    </path>
+    <path class="event-icon event-icon_{{kind}}  js-activity-shape"
+          transform="translate(-8, -8), scale (0.8)"
+          d="M15,11H9V3h2v6h4V11z">
+
+    </path>
+    {{/if}}
+
+    {{#if isCatchingMessage}}
+    <path class="pd-icon-message dev-event-icon js-activity-shape"
+          transform="translate(-9, -9), scale (0.75)"
+          d="M2,4v16h20V4H2z M12,11L7,6h10L12,11z M20,18H4V7l8,8l8-8V18z">
+
+    </path>
+    {{/if}}
+
+    {{#if isSignal}}
+    <path class="dev-activity-icon-event-{{kind}} dev-event-icon js-activity-shape"
+          transform="translate(-12, -12)"
+          d="M2,4v16h20V4H2z M12,11L7,6h10L12,11z M20,18H4V7l8,8l8-8V18z">
+
+    </path>
+    {{/if}}
+    {{#if isTerminate}}
+        <circle class="dev-event-terminate-circle js-activity-shape"
+                cx="0"
+                cy="0"
+                r="13">
+        </circle>
+
+    {{/if}}
+
+    {{#unless isGhost}}
+    <g class="js-activity-connectors">
+        <circle r="4" cx="0" cy="18" index="40" alignment="bottom" charge="-1"
+                class="when-flow-drag dev-diagram-connector js-diagram-connector-visible"></circle>
+        <circle r="7" cx="0" cy="18" index="40" alignment="bottom" charge="-1"
+                class="js-diagram-connector dev-diagram-connector"></circle>
+    </g>
+    {{/unless}}
+
+</g>
+

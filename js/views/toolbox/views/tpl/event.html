@@ -1,0 +1,47 @@
+<g class="dev-activity-event dev-activity-{{type}} dev-activity-{{type}}-{{kind}} dev-toolbox-activity-event"
+   transform="translate(18, 20) scale(0.65)">
+
+    <circle class="dev-event-outer-circle"
+            cx="0"
+            cy="0"
+            r="20">
+    </circle>
+
+    <circle class="dev-activity-event-{{kind}} dev-event-inner-circle "
+            cx="0"
+            cy="0"
+            r="15">
+    </circle>
+
+    {{#if isTimer}}
+    <path class="event-icon_{{kind}} event-icon"
+          transform="translate(-10, -10)"
+          d="M10,1c5,0,9,4,9,9s-4,9-9,9s-9-4-9-9S5,1,10,1 M10,0C4.5,0,0,4.5,0,10s4.5,10,10,10c5.5,0,10-4.5,10-10S15.5,0,10,0L10,0z">
+    </path>
+    <path class="event-icon_{{kind}} event-icon"
+          transform="translate(-10, -10)"
+          d="M15,11H9V3h2v6h4V11z">
+    </path>
+    {{/if}}
+    {{#if isThrowingMessage}}
+    <path class="pd-icon-message dev-event-icon"
+          transform="translate(-12, -12)"
+          d="M12,16l-1-1L2,7v12h20V7l-9,8L12,16z M2,5l1,1l9,8l9-8l1-1H2z"/>
+    </path>
+    {{/if}}
+    {{#if isCatchingMessage}}
+    <path class="pd-icon-message dev-event-icon"
+          transform="translate(-12, -12)"
+          d="M2,4v16h20V4H2z M12,11L7,6h10L12,11z M20,18H4V7l8,8l8-8V18z">
+    </path>
+    {{/if}}
+
+    {{#if isTerminate}}
+    <circle class="dev-event-terminate-circle"
+            cx="0"
+            cy="0"
+            r="13">
+    </circle>
+    {{/if}}
+</g>
+

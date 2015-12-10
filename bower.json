@@ -1,0 +1,27 @@
+{
+  "name": "diagram-designer",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Nikolay Volf"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "diagram",
+    "designer"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "handlebars": "~4.0.5"
+  }
+}

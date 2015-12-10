@@ -1,0 +1,9 @@
+{{#if isEdited}}
+<textarea class="task-title-textarea js-bpmn-titleAreaEdit {{#if isCenterAligned}}text-center{{/if}} {{#if isVerticalCenterAligned}}vertical-center{{/if}}" style="width: {{titleWidth}}px; height: {{height}}px">{{title}}</textarea>
+{{else}}
+<div class="task-title js-activity-shape non-selectable js-bpmn-titleArea" style="max-width: {{titleWidth}}px; max-height: {{height}}px">
+    <div class="task-title-tr js-activity-shape">
+        <div class="js-activity-shape task-title-td {{#if isCenterAligned}}text-center{{/if}} {{#if isVerticalCenterAligned}}vertical-center{{/if}}">{{title}}</div>
+    </div>
+</div>
+{{/if}}
