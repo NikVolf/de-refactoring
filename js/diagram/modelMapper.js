@@ -21,7 +21,7 @@ function ()
 
                 activity = activityCandidate;
                 return true;
-            })
+            });
 
             return activity;
         },
@@ -50,7 +50,7 @@ function ()
         defineSingleMapper: function(newSingleMapper) {
             this.mappers = [newSingleMapper];
         }
-    })
+    });
 
     ModelMapper.config = constants;
 

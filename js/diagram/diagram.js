@@ -12,34 +12,34 @@
 /* global define, require, Handlebars, Marionette, classes */
 
 define([
-    'module/d3Graphics',
-    './toolbox/views/ToolboxView',
-    './SelectFrameView',
+    'd3utils',
+    './toolbox',
+    './selectFrame',
     './modelMapper',
     '../utils/UndoRedoHelper',
     '../utils/ClipboardHelper',
     './deleteZone',
-    'text!./bpmn/tpl/disabledZone.html',
-    'text!../templates/svg.html',
-    'text!../templates/disabledMessage.html'
+    'd3'
 
-], function (d3Graphics,
+], function (helpers,
              ToolboxView,
              SelectFrameView,
              ModelMapper,
              UndoRedoHelper,
              ClipboardHelper,
              DeleteZoneView,
-             ActivityInfoView,
-             disabledZoneTemplate,
-             svgTemplate,
-             disabledMessageTemplate
-    ) {
+             ActivityInfoView)
+{
     'use strict';
 
-    var helpers = d3Graphics.helpers;
+    var disabledMessageTemplate = '<text x="60" y="80" class="empty-grid" >{{message}}</text>';
 
-    var d3 = d3Graphics.d3;
+    var svgTemplate = '<defs>' +
+        '<clipPath id="clipPath"><rect x="0" y="-5" width="190" height="40" />' +
+        '</clipPath>' +
+        '<linearGradient id="gradient-overflow"><stop offset="0%" stop-color="#fff" stop-opacity="0"/><stop offset="100%" stop-color="#fff"/> ' +
+        '</linearGradient> ' +
+        '</defs>';
 
     return Marionette.Object.extend({
 
@@ -52,21 +52,43 @@ define([
         svgTemplate: Handlebars.compile(svgTemplate),
 
         initialize: function (cfg) {
+            this.__readConfig(cfg || {});
+            this.__createContainers();
+            this.isReadOnly || this.createToolbox();
+
+            this.wireInternalEvents();
+            this.wireSelectorEvents();
+            this.appendLayers();
+            this.setDefaultFormOffset();
+
+            this.history = new UndoRedoHelper(this);
+            this.clipboard = new ClipboardHelper(this);
+
+            this.activeEmbeddedProcessId = null;
+            this.initCollection();
+        },
+
+        __readConfig: function(cfg) {
             this.scroll = cfg.scroll || { x: 60, y: 0 };
+            this.isReadOnly = cfg.isReadOnly;
+            this.grid = cfg.grid || {
+                x: 20,
+                y: 20
+            };
+            this.isEnterprise = cfg.isEnterprise;
+            this.collection = cfg.collection;
+        },
 
+
+        __createContainers: function(cfg) {
             this.graphContainer = $('.js-graphContainer');
-
             this.visibleGraph$ = $(".js-visibleGraph");
-
-            this.svg = d3Graphics.d3.select(this.graphContainer[0])
+            this.svg = d3.select(this.graphContainer[0])
                 .append('svg')
                 .html(this.svgTemplate)
                 .attr("width", "100%")
                 .attr("height", "99%");
-
             this.formContainer = this.svg.append('g').classed({'form-container': true});
-
-            this.isReadOnly = cfg.isReadOnly;
 
             this.isReadOnly || (this.toolboxContainer = this.svg.append('g').classed({'toolbox-container': true}));
             this.tempActivityContainer = this.svg.append('g').classed({'temp-activity-container': true});
@@ -74,33 +96,6 @@ define([
             this.$el = $(this.svg[0]);
 
             this.svgNode = this.svg.node();
-
-            this.createActivityInfo();
-
-            this.isReadOnly || this.createToolbox();
-
-            this.wireInternalEvents();
-
-            this.wireSelectorEvents();
-
-            this.appendLayers();
-
-            this.setDefaultFormOffset();
-
-            this.history = new UndoRedoHelper(this);
-            this.clipboard = new ClipboardHelper(this);
-
-            this.grid = cfg.grid || {
-                x: 20,
-                y: 20
-            };
-
-            this.isEnterprise = cfg.isEnterprise;
-
-            this.activeEmbeddedProcessId = null;
-
-            this.initCollection(cfg.collection);
-
         },
 
         setDefaultScroll: function(options) {
@@ -191,20 +186,21 @@ define([
         },
 
         updateFromCollection: function() {
-            var self = this;
+            if (!this.collection)
+                return;
 
-            if (self.viewModels.length > 0)
-                self.purge();
+            if (this.viewModels.length > 0)
+                this.purge();
 
-            _.chain(self.collection.models)
+            _.chain(this.collection.models)
                 .sort(function(a) { return ModelMapper.types[a.get("type")].layer || 0 })
                 .each(function(activityModel) {
                     if (this.isActivityModelInScope(activityModel))
-                        self.addNewActivity(activityModel.attributes);
-                }.bind(self));
+                        this.addNewActivity(activityModel.attributes);
+                }.bind(this));
 
-            self.setExistingDefaultPool();
-            self.updateViewModelStates();
+            this.setExistingDefaultPool();
+            this.updateViewModelStates();
         },
 
         isActivityModelInScope: function(activityModel) {
@@ -222,14 +218,15 @@ define([
             this.scopeToContainActivityModel(model);
         },
 
-        initCollection: function(collection) {
-            var self = this;
+        __doCollectionInitialized: function() {
+            this.trigger("collection:initialized", this);
+        },
 
-            self.collection = collection;
-            self.updateFromCollection();
-            self.id = self.collection.parent && self.collection.parent.get("processId");
-            self.history.clear();
-            self.createDeleteZone();
+        initCollection: function() {
+            this.updateFromCollection();
+            this.__doCollectionInitialized();
+            this.history.clear();
+            this.createDeleteZone();
         },
 
         invalidate: function(ids) {
@@ -966,7 +963,9 @@ define([
             });
             this.tempActivityContainer.attr({ transform: transform });
 
-            this.gaugePoint = this.svg.node().createSVGPoint();
+            this.svgNode = this.svg.node();
+            if (this.svgNode)
+                this.gaugePoint = this.svg.node().createSVGPoint();
         },
 
         foreachViewModels: function (fn) {
@@ -1111,8 +1110,6 @@ define([
             this.draggedViewModel && this.draggedViewModel.render();
         },
 
-        disabledZoneTpl: Handlebars.compile(disabledZoneTemplate),
-
         appendLayers: function () {
             this.containers = {
                 'pool-g': this.formContainer.append('g').classed('pool-g', true),
@@ -1126,11 +1123,6 @@ define([
                 'dropzones-g': this.formContainer.append('g').classed('dropzones-g', true),
                 'ghost-g': this.formContainer.append('g').classed('ghost-g', true)
             };
-            //
-            //if (this.isReadOnly)
-            //    this.formContainer.append(this.containers['object-g']);
-
-//            this.containers['pool-g'].append("g").html(this.disabledZoneTpl());
 
             this.formContainer.attr({ "fill": "#eee" } );
 
@@ -1172,7 +1164,9 @@ define([
             this.defaultPool && this.defaultPool.captureOriginalState();
         },
 
-        createViewByModel: ModelMapper.createViewByModel.bind(ModelMapper),
+        createViewByModel: function() {
+            ModelMapper.createViewByModel.bind(ModelMapper)
+        },
 
         addTempViewModel: function (model) {
             var self = this;
@@ -1254,7 +1248,7 @@ define([
             var result = null;
 
             this.svg.selectAll('.diagram-drop-zone').each(function() {
-                var view = d3Graphics.d3.select(this).property("zoneView");
+                var view = d3.select(this).property("zoneView");
                 var clientRect = view.getClientPlacedRect();
                 if (clientPosition.x > clientRect.x && clientPosition.x < clientRect.x + clientRect.width &&
                     clientPosition.y > clientRect.y && clientPosition.y < clientRect.y + clientRect.height)
@@ -1475,7 +1469,7 @@ define([
             }
 
             connectors.each(function () {
-                var connector = d3Graphics.d3.select(this);
+                var connector = d3.select(this);
                 var connectorCfg = connector.property('model');
                 var charge = connector.attr('charge');
                 if (desiredCharge && (charge != desiredCharge))

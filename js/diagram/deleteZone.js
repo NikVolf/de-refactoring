@@ -9,12 +9,11 @@
  *       actual or intended publication of such source code.
  */
 
-define([
-    'module/d3Graphics'
-], function (d3Graphics) {
+define(['d3utils'],
+
+function (helpers) {
 
     return Marionette.Object.extend({
-
         initialize: function(cfg) {
             this.parent = cfg.parent;
 
@@ -34,15 +33,13 @@ define([
             x: 130,
             y: 23
         },
-        defaultText: Localizer.get('PROCESS.PROCESSTEMPLATES.DESIGNER.DELETEZONETEXT'),
+        defaultText: "DROP HERE TO DELETE",
 
 
         appendControls: function() {
-            this.contentElement = d3Graphics.helpers.appendSimpleGroup(this.parent.containers['dropzones-g'])
+            this.contentElement = helpers.appendSimpleGroup(this.parent.containers['dropzones-g'])
                 .classed("delete-zone diagram-drop-zone", true);
-
             this.contentElement.property("zoneView", this);
-
             this.render();
         },
 
@@ -80,7 +77,6 @@ define([
 
         devastationMode: function(isOn) {
             this.panelElement.attr({
-                /*'stroke-width': isOn && 3 || 2,*/
                 'fill': isOn ? "rgb(198, 105, 84)" : "rgb(245, 220, 214)"
             });
 
@@ -106,9 +102,7 @@ define([
         },
 
         render: function() {
-
             var rect = this.getPlacedRect();
-
             this.panelElement = this.contentElement.append("rect")
                 .attr( {
                     'width': rect.width,
@@ -116,14 +110,8 @@ define([
                 })
                 .attr({
                     'fill': '#f5dcd6'
-                    /*'opacity': '0.75',
-                    'stroke': '#D06B4B',
-                    'stroke-width': 2,
-                    'stroke-dasharray': '6 3',
-                    'color': '#00ff5a' */
                 })
                 .classed("no-select", true);
-
             this.textElement = this.contentElement.append("text")
                 .attr({
                     'dx': this.textPosition.x,
@@ -134,7 +122,6 @@ define([
                 })
                 .text(this.defaultText)
                 .style({ "cursor": "default" });
-
             this.applyRootTransform(rect);
         },
 
@@ -149,9 +136,7 @@ define([
 
         applyRootTransform: function(source) {
             var rect = source || this.getPlacedRect();
-
-            this.contentElement.attr(d3Graphics.helpers.getTranslationAttribute(rect));
-
+            this.contentElement.attr(helpers.getTranslationAttribute(rect));
         },
 
         parentResize: function() {
