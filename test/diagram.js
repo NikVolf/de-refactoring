@@ -6,7 +6,8 @@ define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activit
     var testSettings = {
         fakeId1: "id.fake.1",
         randomActivityType: "rectangle", // guarantee to be random
-        primitiveActivityTemplate: '<g class="js-activity-resize-root"><rect x=0 y=0 width=100 height=100></rect></g>'
+        primitiveActivityTemplate: '<g class="js-activity-resize-root"><rect x=0 y=0 width=100 height=100></rect></g>',
+        graphContainerClass: "js-graphContainer"
     };
 
     var FakeModelMapper = function() {
@@ -23,6 +24,10 @@ define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activit
         var diagram = new Diagram();
         diagram.modelMapper = new FakeModelMapper();
         return diagram;
+    };
+
+    var newTemplatedActivity = function() {
+        return new Activity({ template: testSettings.primitiveActivityTemplate });
     };
 
 
@@ -72,9 +77,30 @@ define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activit
     });
 
     describe("Diagram render", function() {
+
+        var rootSvgSelector = "." + testSettings.graphContainerClass + " svg";
+        var fakeIdSelector = "g#" + testSettings.fakeId1;
+
+        beforeEach(function() {
+            this.container = document.createElement("div");
+            this.container.setAttribute("class", testSettings.graphContainerClass);
+            document.body.appendChild(this.container);
+        });
+
+        afterEach(function() {
+            document.body.removeChild(this.container);
+        });
+
         it("can be rendered", function() {
             var diagram = new Diagram();
             diagram.render();
+        });
+
+        it("appends root svg element when rendered", function() {
+            var diagram = new Diagram();
+            diagram.render();
+
+            expect($(rootSvgSelector).length).toBe(1);
         });
 
         it("unhides and renders activity being added", function() {
@@ -88,5 +114,18 @@ define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activit
             expect(activity.render).toHaveBeenCalled();
             expect(activity.isHidden).not.toBe(true);
         });
+
+        it("contains enough layers for activities", function() {
+            var diagram = new Diagram();
+            diagram.render();
+
+            var activity = newTemplatedActivity();
+            diagram.add(activity);
+
+            expect($(fakeIdSelector).length).toBe(1);
+
+            console.log($(rootSvgSelector).html());
+        })
+
     });
 });
