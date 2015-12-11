@@ -11,6 +11,7 @@ function ()
         initialize: function() {
             this.mappers = []
         },
+
         matchModel: function(activityModel) {
             var activity = null;
 
@@ -25,6 +26,7 @@ function ()
 
             return activity;
         },
+
         matchModelContainer: function(activityModel) {
             var resolvedContainer = constants.defaultContainer;
 
@@ -44,9 +46,15 @@ function ()
 
             return resolvedContainer;
         },
+
+        matchTypeContainer: function(activityType) {
+            return constants.defaultContainer;
+        },
+
         addMapper: function(extraMapping) {
             this.mappers.push(extraMapping);
         },
+
         defineSingleMapper: function(newSingleMapper) {
             this.mappers = [newSingleMapper];
         }

@@ -41,6 +41,14 @@ define([
         '</linearGradient> ' +
         '</defs>';
 
+    var SelfHostedCollection = function() {
+        this.models = [];
+
+        this.add = function(model) {
+            this.models.push(model);
+        };
+    };
+
     return Marionette.Object.extend({
 
         laneCnt: 0,
@@ -63,6 +71,7 @@ define([
 
             this.history = new UndoRedoHelper(this);
             this.clipboard = new ClipboardHelper(this);
+            this.modelMapper = new ModelMapper();
 
             this.activeEmbeddedProcessId = null;
             this.initCollection();
@@ -78,7 +87,6 @@ define([
             this.isEnterprise = cfg.isEnterprise;
             this.collection = cfg.collection;
         },
-
 
         __createContainers: function(cfg) {
             this.graphContainer = $('.js-graphContainer');
@@ -223,6 +231,9 @@ define([
         },
 
         initCollection: function() {
+            if (this.collection == null)
+                this.collection = new SelfHostedCollection();
+
             this.updateFromCollection();
             this.__doCollectionInitialized();
             this.history.clear();
@@ -518,6 +529,12 @@ define([
                 width: maxX - minX,
                 height: maxY - minY
             }
+        },
+
+        addActivity: function(activity) {
+            this.__pushViewModel();
+            if (!activity.isHidden)
+                activity.render();
         },
 
         addActiveType: function (event) {
@@ -1135,7 +1152,7 @@ define([
         getViewModelById: function (id) {
             var visibleViewModel = this.viewModelsHash[id];
 
-            if (visibleViewModel == null) {
+            if (!visibleViewModel) {
                 var model = this.collection.get(id);
                 if (model != null) {
                     return _.extend(this.viewModelByModel(model), { isHidden: true });
@@ -1183,6 +1200,9 @@ define([
         },
 
         addNewActivity: function (obj, options) {
+            if (!obj)
+                throw "Cannot add empty object as an activity";
+
             options = options || {};
 
             if (options.client) {
@@ -1233,11 +1253,30 @@ define([
             return ModelMapper.createViewByModel(model, this, false, true);
         },
 
+        __pushViewModel: function(viewModel) {
+            this.viewModels.push(viewModel);
+            this.viewModelsHash[viewModel.getId()] = viewModel;
+        },
+
         addNewActivityViaModel: function(model) {
-            var view = ModelMapper.createViewByModel(model, this, false);
-            this.viewModels.push(view);
-            this.viewModelsHash[view.getId()] = view;
+            var ActivityView = this.modelMapper.matchModel(model);
+            var view = new ActivityView(
+                {
+                    model: model,
+                    parent: this,
+                    isTemp: false,
+                    isHidden: false
+                }
+            );
+            this.__pushViewModel(view);
             return view;
+        },
+
+        add: function(activity) {
+            this.__pushViewModel(activity);
+            activity.parent = this;
+            activity.isHidden = false;
+            activity.render();
         },
 
         isDropAllowed: function (e) {
@@ -1773,7 +1812,15 @@ define([
             if (isTemp)
                 return this.tempActivityContainer;
 
-            containerName = ModelMapper.getElementContainer(targetType || this.activeType);
+            containerName = this.modelMapper.matchTypeContainer(targetType);
+            return this.containers[containerName];
+        },
+
+        getActivityContainer: function(activity) {
+            if (activity.isTemp)
+                return this.tempActivityContainer;
+
+            var containerName = this.modelMapper.matchModelContainer(activity.model);
             return this.containers[containerName];
         },
 

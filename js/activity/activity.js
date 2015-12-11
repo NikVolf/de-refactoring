@@ -19,6 +19,9 @@ define([
                 height: 80
             }
         };
+        this.get = function(key) {
+            return this.attributes[key];
+        }
     };
 
     return Marionette.Object.extend({
@@ -34,6 +37,10 @@ define([
             this.model = cfg.model || (new SelfHostedModel());
             this.parent = cfg.parent;
             this.isHidden = !cfg.parent || cfg.isHidden;
+
+            if (cfg.template) {
+                this.handlebarTemplate = Handlebars.compile(cfg.template);
+            }
         },
 
         initialize: function (cfg) {
@@ -480,29 +487,40 @@ define([
             return _.extend({}, this.model.attributes.position || helpers.nullVector );
         },
 
-        generateView: function () {
-            var self = this,
-                attrs = self.getLayout(),
-                classes = self.getClasses(),
-                node = self.getElementStub(),
-                position = this.getPosition();
+        __resolveParentContainer: function(containerClass) {
+            return this.parent.containers[containerClass];
+        },
 
+        __updateParentContainers: function() {
+            this.ghostG = this.__resolveParentContainer('ghost-g');
+            this.selectG = this.__resolveParentContainer('select-g');
+            this.subActivityG = this.__resolveParentContainer('subactivity-g');
+            this.overlayG = this.__resolveParentContainer('overlay-g');
+        },
+
+        __createNodes: function(node) {
             this.activityG = node.append('g').classed({'activity-g': true});
             this.connectorsG = node.append('g').classed({'connectors-g': true});
             this.resizersG = node.append('g').classed({'resizers-g': true });
             this.nodeOverlayG = node.append('g').classed({'node-overlay-g': true });
-            this.ghostG = this.parent.containers['ghost-g'];
-            this.selectG = this.parent.containers['select-g'];
-            this.subActivityG = this.parent.containers['subactivity-g'];
-            this.overlayG = this.parent.containers['overlay-g'];
+        },
+
+        generateView: function () {
+            var attributes = this.getLayout();
+            var classes = this.getClasses();
+            var node = this.getElementStub();
+            var position = this.getPosition();
+
+            this.__createNodes(node);
+            this.__updateParentContainers();
 
             node.attr({'transform': 'translate(' + position.x + ',' + position.y + ')' });
 
             node.classed(classes);
-            node.attr(attrs);
+            node.attr(attributes);
             node.datum(self);
 
-            self.appendViewItems(node);
+            this.appendViewItems(node);
             this.ghostEntity && this.setGhostPosition(position);
 
             return node;
@@ -1107,23 +1125,30 @@ define([
             this.rootNode.classed(x);
         },
 
-        render: function () {
-            var node = this.generateView();
-
+        __updateContainer: function() {
             if (!this.parentContainer)
                 this.parentContainer = this.parent.getContainer(this.model.attributes.type, this.isTemp);
+        },
 
+        __appendServiceNodes: function() {
             this.appendConnectorsNodes(node);
             this.appendResizers();
             this.appendTitle();
+        },
+
+        __appendOverlayNodes: function() {
+            this.appendSelectBorder();
+            this.appendInfoBtn();
+        },
+
+        render: function () {
+            var node = this.generateView();
+            this.__updateContainer();
             this.parentContainer.select(function () {
                 return this.appendChild(node[0][0]);
             });
 
             this.rootNode = node;
-
-            this.appendSelectBorder();
-            this.appendInfoBtn();
 
             if (this.isInvalid)
                 this.invalidate();
@@ -1249,6 +1274,10 @@ define([
         },
 
         appendViewItems: function () {
+            if (!this.handlebarTemplate)
+                return;
+
+            this.activityG.html(this.handlebarTemplate(this.model));
         },
 
         getD3ConnectorByIndex: function (index) {
