@@ -97,6 +97,10 @@ define(['./toolboxGroup'],
             this.groups = ElementGroupView.initPalette(this.palette, this);
         },
 
+        pushGroup: function(elementsGroupView) {
+            this.groups.push(elementsGroupView);
+        },
+
         setPalette: function(newPalette) {
             this.palette = newPalette;
             this.render();

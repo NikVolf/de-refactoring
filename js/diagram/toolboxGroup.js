@@ -2,30 +2,27 @@ define(['d3utils', 'd3'],
 
 function (helpers)
 {
+    var TemplatedElement = function(options) {
+        this.template = Handlebars.compile(options.template);
+    };
+
+    TemplatedElement.prototype.render = function() {
+
+    };
+
     return Marionette.Object.extend({
-
-        id: "abstractGroup1",
-
-        position: {
-            x: 0,
-            y: 0
-        },
-
-        width: 100,
-
-        height: 100,
-
-        titleHeight: 15,
-
-        title: "no title",
-
-        elements: [],
 
         initialize: function(cfg) {
             this.parent = cfg.parent;
             this.views = [];
-
-            this.render();
+            this.elements = [];
+            this.container = cfg.container || this.parent.container;
+            this.position = { x: 0, y: 0};
+            this.width = 100;
+            this.height = 100;
+            this.titleHeight = 15;
+            this.title = "abstract group";
+            this.id = "abstractGroup1";
         },
 
         render: function() {
@@ -38,7 +35,7 @@ function (helpers)
 
             rootAttrs = _.extend(rootAttrs, helpers.getTranslationAttribute(this.position));
 
-            this.rootContainer = this.parent.container.append("g").attr(rootAttrs);
+            this.rootContainer = this.container.append("g").attr(rootAttrs);
 
             this.borderElement = this.rootContainer
                 .append("rect")

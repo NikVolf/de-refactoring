@@ -7,6 +7,7 @@ define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activit
         fakeId1: "id.fake.1",
         randomActivityType: "rectangle", // guarantee to be random
         primitiveActivityTemplate: '<g class="js-activity-resize-root"><rect x=0 y=0 width=100 height=100></rect></g>',
+        primitiveActivityTemplateWithId: '<g class="js-activity-resize-root" id="{{id}}"><rect x=0 y=0 width=100 height=100></rect></g>',
         graphContainerClass: "js-graphContainer"
     };
 
@@ -119,13 +120,13 @@ define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activit
             var diagram = new Diagram();
             diagram.render();
 
-            var activity = newTemplatedActivity();
+            var activity = new Activity({ template: testSettings.primitiveActivityTemplateWithId });
             diagram.add(activity);
 
-            expect($(fakeIdSelector).length).toBe(1);
-
-            console.log($(rootSvgSelector).html());
-        })
+            var node = document.getElementById(activity.getId());
+            expect(node).not.toBe(null);
+            expect(node).not.toBe(undefined);
+        });
 
     });
 });

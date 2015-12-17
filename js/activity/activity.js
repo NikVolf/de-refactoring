@@ -19,8 +19,12 @@ define([
                 height: 80
             }
         };
+        this.id = this.attributes.id = helpers.getNewId();
         this.get = function(key) {
             return this.attributes[key];
+        };
+        this.toJSON = function() {
+            return JSON.stringify(this.attributes);
         }
     };
 
