@@ -19,9 +19,14 @@ define(['./toolboxGroup'],
 
     return Marionette.Object.extend({
         initialize: function (cfg) {
-            this.parent = cfg.parent;
-            this.palette = cfg.palette || 'default';
+            this.__readConfig(cfg || {});
+            this.groups = [];
             this.bindEvents();
+        },
+
+        __readConfig: function(cfg) {
+            this.container = cfg.container || (cfg.parent && cfg.parent.toolboxContainer);
+            this.palette = cfg.palette || 'default';
         },
 
         width: 90,
@@ -60,7 +65,8 @@ define(['./toolboxGroup'],
         },
 
         render: function () {
-            this.container = this.parent.toolboxContainer;
+            if (!this.container)
+                return;
 
             this.container.selectAll("*").remove();
 
@@ -94,7 +100,9 @@ define(['./toolboxGroup'],
         },
 
         appendElements: function () {
-            this.groups = ElementGroupView.initPalette(this.palette, this);
+            //this.groups = ElementGroupView.initPalette(this.palette, this);
+
+            _.invoke(this.groups, "render");
         },
 
         pushGroup: function(elementsGroupView) {

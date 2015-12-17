@@ -13,22 +13,37 @@ function (helpers)
     return Marionette.Object.extend({
 
         initialize: function(cfg) {
-            this.parent = cfg.parent;
-            this.views = [];
             this.elements = [];
-            this.container = cfg.container || this.parent.container;
             this.position = { x: 0, y: 0};
             this.width = 100;
             this.height = 100;
             this.titleHeight = 15;
             this.title = "abstract group";
             this.id = "abstractGroup1";
+
+            this.__readConfig(cfg || {});
+        },
+
+        __readConfig: function(cfg) {
+            this.parent = cfg.parent;
+            this.container = cfg.container || (this.parent && this.parent.container);
+        },
+
+        __generateElements: function() {
+            this.views = [];
+            _.each(this.elements, function(element) {
+                var cfg = _.extend(element, {
+                    container: this.rootContainer
+                });
+
+                var viewConstructor = element.view;
+                var newView = new viewConstructor(element);
+
+                this.views.push(newView);
+            }.bind(this));
         },
 
         render: function() {
-
-            var self = this;
-
             var rootAttrs = {
                 'id': this.id
             };
@@ -71,19 +86,9 @@ function (helpers)
                     opacity: "0"
                 });
 
-            _.each(this.elements, function(element) {
-                var cfg = _.extend(element, {
-                    diagramView: self.parent.diagramView,
-                    parent: self,
-                    controller: self.parent,
-                    clickable: self.elementsClickable
-                });
+            this.__generateElements();
 
-                var viewConstructor = element.view;
-                var newView = new viewConstructor(element);
-
-                self.views.push(newView);
-            });
+            _.invoke(this.views, "render");
 
         }
     });
