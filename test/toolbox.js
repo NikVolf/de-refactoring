@@ -1,4 +1,4 @@
-define(['js/diagram/toolbox', 'js/diagram/toolboxGroup'], function(ToolboxView, ToolboxGroup) {
+define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], function(ToolboxView, ToolboxGroup, renderHelpers) {
 
    describe("Toolbox", function() {
 
@@ -70,6 +70,18 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup'], function(ToolboxView, 
             expect(renderSpy).toHaveBeenCalledTimes(2);
         });
 
+        it("pushing a group cases it to re-render", function() {
+            var toolbox = new ToolboxView({ container: d3.select(this.containerElement)});
+            spyOn(toolbox, "render");
+
+            var group = new ToolboxGroup();
+
+            toolbox.pushGroup(group)
+
+            expect(toolbox.render).toHaveBeenCalledTimes(1);
+
+        })
+
     });
 
     describe("Toobox groups", function() {
@@ -125,23 +137,11 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup'], function(ToolboxView, 
     describe("Toolbox groups rendering", function() {
 
         beforeEach(function() {
-            this.svgId = "svg-" + Math.random();
-            this.containerId =  "container-" + Math.random();
-            this.svgElement = document.createElement("svg");
-            this.svgElement.setAttribute("id", this.svgId);
-            document.body.appendChild(this.svgElement);
-
-            this.containerElement = document.createElement("g");
-            this.containerElement.setAttribute("id", this.containerId);
-            this.svgElement.appendChild(this.containerElement);
+            renderHelpers.setupSvgWithContainer(this);
         });
 
         afterEach(function() {
-            document.body.removeChild(this.svgElement);
-            delete this.svgId;
-            delete this.containerId;
-            delete this.svgElement;
-            delete this.containerElement;
+            renderHelpers.teardownSvgWithContainer(this);
         });
 
 

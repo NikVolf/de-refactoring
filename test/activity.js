@@ -1,4 +1,4 @@
-define(["js/activity/activity"], function(Activity) {
+define(["js/activity/activity", './renderHelpers'], function(Activity, renderHelpers) {
 
     var FakeParent = function() {
         this.isFake = true;
@@ -61,23 +61,11 @@ define(["js/activity/activity"], function(Activity) {
 
     describe("activity simple rendering", function() {
         beforeEach(function() {
-            this.svgId = "svg-" + Math.random();
-            this.containerId =  "container-" + Math.random();
-            this.svgElement = document.createElement("svg");
-            this.svgElement.setAttribute("id", "svg-" + this.newId);
-            document.body.appendChild(this.svgElement);
-
-            this.containerElement = document.createElement("g");
-            this.containerElement.setAttribute("id", this.containerId);
-            this.svgElement.appendChild(this.containerElement);
+            renderHelpers.setupSvgWithContainer(this);
         });
 
         afterEach(function() {
-            document.body.removeChild(this.svgElement);
-            delete this.svgId;
-            delete this.containerId;
-            delete this.svgElement;
-            delete this.containerElement;
+            renderHelpers.teardownSvgWithContainer(this);
         });
 
         it("can be created from just svg string", function() {

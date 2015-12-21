@@ -1,7 +1,7 @@
 /**
  * Created by nvolf on 10.12.2015.
  */
-define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activity) {
+define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], function(Diagram, Activity, renderHelpers) {
 
     var testSettings = {
         fakeId1: "id.fake.1",
@@ -83,13 +83,11 @@ define(['js/diagram/diagram', 'js/activity/activity'], function(Diagram, Activit
         var fakeIdSelector = "g#" + testSettings.fakeId1;
 
         beforeEach(function() {
-            this.container = document.createElement("div");
-            this.container.setAttribute("class", testSettings.graphContainerClass);
-            document.body.appendChild(this.container);
+            renderHelpers.setupHtmlContainer(this, testSettings);
         });
 
         afterEach(function() {
-            document.body.removeChild(this.container);
+            renderHelpers.teardownHtmlContainer(this);
         });
 
         it("can be rendered", function() {

@@ -1,7 +1,7 @@
 define(['js/diagram/primitivesPalette', 'js/diagram/diagram'], function(PrimitivesPalette, Diagram) {
 
 
-    describe("Diagram palette", function() {
+    describe("primitives palette trivia", function() {
 
         it("has a module that loads successfully", function() {
 
@@ -23,6 +23,7 @@ define(['js/diagram/primitivesPalette', 'js/diagram/diagram'], function(Primitiv
 
         it("can be installed on diagram", function() {
             var diagram = new Diagram();
+            spyOn(diagram.toolboxView, "render");
             var palette = new PrimitivesPalette();
             palette.install(diagram);
         });
@@ -30,15 +31,18 @@ define(['js/diagram/primitivesPalette', 'js/diagram/diagram'], function(Primitiv
         it("adds element groups to the toolbox when installed", function() {
             var diagram = new Diagram();
             var palette = new PrimitivesPalette();
-            spyOn(diagram.toolboxView, "pushGroup").and.callThrough();
+            spyOn(diagram.toolboxView, "pushGroup");
+            spyOn(diagram.toolboxView, "render");
 
             palette.install(diagram);
 
             expect(diagram.toolboxView.pushGroup).toHaveBeenCalledTimes(1);
-
-
         })
 
+
+    });
+
+    describe("primitive palette rendering", function() {
 
     });
 
