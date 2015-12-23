@@ -18,6 +18,10 @@ define([], function() {
                 this.containerElement.setAttribute("id", this.containerId);
                 this.svgElement.appendChild(this.containerElement);
 
+                this.svgSelector = "#" + this.svgId;
+
+                this.svgSelect = function() { return $(document.getElementById(this.svgId))}.bind(this);
+
             }.bind(context))();
         },
 
@@ -28,6 +32,8 @@ define([], function() {
                 delete this.containerId;
                 delete this.svgElement;
                 delete this.containerElement;
+                delete this.svgSelector;
+                delete this.svgSelect;
 
             }.bind(context))();
 
@@ -38,6 +44,9 @@ define([], function() {
                 this.container = document.createElement("div");
                 this.container.setAttribute("class", testSettings.graphContainerClass);
                 document.body.appendChild(this.container);
+
+                this.htmlSelect = $(this.container);
+
             }.bind(context))();
         },
 

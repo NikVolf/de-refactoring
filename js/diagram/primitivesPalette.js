@@ -4,7 +4,7 @@
 define(['./toolboxGroup', './toolboxElement', '../activity/activity'], function(ToolboxGroup, ToolboxElement, Activity) {
 
     var Circle = function() {
-        this.offset = { x: 0, y: 0 };
+        this.offset = { left: 0, top: 0 };
         this.view = Circle.ToolboxElement;
         this.type = "Circle";
     };
@@ -12,7 +12,7 @@ define(['./toolboxGroup', './toolboxElement', '../activity/activity'], function(
     Circle.ToolboxElement = ToolboxElement.extend({
         initialize: function() {
             ToolboxElement.prototype.initialize.apply(this, arguments);
-            this.tpl = Handlebars.compile("<circle x=0 y=0 r=15 />")
+            this.tpl = Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' cx=15 cy=7 r=10 />");
         }
     });
 
@@ -24,16 +24,43 @@ define(['./toolboxGroup', './toolboxElement', '../activity/activity'], function(
         }
     });
 
+    var Rectangle = function() {
+        this.offset = { left: 40, top: 0 };
+        this.view = Rectangle.ToolboxElement;
+        this.type = "Rectangle";
+    };
+
+    Rectangle.ToolboxElement = ToolboxElement.extend({
+
+        initialize: function() {
+            ToolboxElement.prototype.initialize.apply(this, arguments);
+            this.tpl = Handlebars.compile("<rect class='js-toolbox toolbox-rectangle-primitive' x=0 y=0 width=25 height=15 />")
+        }
+    });
+
+    var modelReference = {
+        'Circle': Circle.Activity,
+        'Rectangle': Rectangle.Activity,
+
+        matchModel: function(model) {
+            return this[model.attributes.type]
+        }
+    };
+
     var PrimitiveShapesGroup = ToolboxGroup.extend({
         initialize: function() {
             ToolboxGroup.prototype.initialize.apply(this, arguments);
             this.elements.push(new Circle());
+            this.elements.push(new Rectangle());
+            this.id = "primitivesGroup";
+            this.title = "Primitives"
         }
     });
 
     return Marionette.Object.extend({
         install: function(diagram) {
             diagram.toolboxView.pushGroup((new PrimitiveShapesGroup({ container: diagram.toolboxView })));
+            diagram.modelMapper.addMapper(modelReference);
         }
     });
 

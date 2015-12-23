@@ -33,7 +33,7 @@ function (helpers)
             this.views = [];
             _.each(this.elements, function(element) {
                 var cfg = _.extend(element, {
-                    container: this.rootContainer
+                    container: this.container
                 });
 
                 var viewConstructor = element.view;
@@ -41,6 +41,10 @@ function (helpers)
 
                 this.views.push(newView);
             }.bind(this));
+        },
+
+        updateContainer: function(container) {
+            this.container = container;
         },
 
         render: function() {

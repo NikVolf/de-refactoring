@@ -86,16 +86,19 @@ define([
             };
             this.isEnterprise = cfg.isEnterprise;
             this.collection = cfg.collection;
+
+            this.container = cfg.container;
+
+            this.size = cfg.size || { width: "800px", height: "600px" };
         },
 
         __createContainers: function(cfg) {
-            this.graphContainer = $('.js-graphContainer');
-            this.visibleGraph$ = $(".js-visibleGraph");
+            this.graphContainer = this.container || $('.js-graphContainer');
             this.svg = d3.select(this.graphContainer[0])
                 .append('svg')
                 .html(this.svgTemplate)
-                .attr("width", "100%")
-                .attr("height", "99%");
+                .attr("width", this.size.width)
+                .attr("height", this.size.height);
             this.formContainer = this.svg.append('g').classed({'form-container': true});
 
             this.isReadOnly || (this.toolboxContainer = this.svg.append('g').classed({'toolbox-container': true}));
@@ -148,8 +151,10 @@ define([
         },
 
         hideActivityInfo: function() {
-            this.activityInfo.activity = null;
-            this.activityInfo.hide();
+            if (this.activityInfo) {
+                this.activityInfo.activity = null;
+                this.activityInfo.hide();
+            }
         },
 
         wireInternalEvents: function() {
@@ -1125,6 +1130,10 @@ define([
             });
 
             this.draggedViewModel && this.draggedViewModel.render();
+
+            if (!this.graphWidth) {
+                this.resize();
+            }
         },
 
         appendLayers: function () {
@@ -1992,12 +2001,11 @@ define([
         },
 
         resize: function () {
-            var visibleGraph = $('.js-visibleGraph');
-            this.graphWidth = visibleGraph.width();
-            this.graphHeight = visibleGraph.height();
+            this.graphWidth = this.$el.outerWidth();
+            this.graphHeight = this.$el.outerHeight();
 
             $(this.graphContainer).width(this.graphWidth);
-            $(this.graphContainer).height("100%");
+            $(this.graphContainer).height(this.graphHeight);
 
             this.trigger("resize");
         },

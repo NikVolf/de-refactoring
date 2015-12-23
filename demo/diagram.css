@@ -1,0 +1,19 @@
+.js-graphContainer {
+    min-height: 800px;
+    height: 100%;
+}
+
+
+/* svg */
+
+.toolbox-circle-primitive {
+    fill: none;
+    stroke: blue;
+    stroke-width: 1.5;
+}
+
+.toolbox-rectangle-primitive {
+    fill: none;
+    stroke: red;
+    stroke-width: 1.5;
+}

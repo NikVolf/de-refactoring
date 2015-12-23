@@ -110,7 +110,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
 
             group.elements.push({
                 view: elementConstructorSpy
-            })
+            });
 
             group.__generateElements();
 
@@ -124,7 +124,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
             group.elements.push({
                 view: elementConstructorSpy,
                 option1: "option1FakeValue"
-            })
+            });
 
             group.__generateElements();
 
@@ -152,6 +152,5 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
         });
 
     });
-
 
 });

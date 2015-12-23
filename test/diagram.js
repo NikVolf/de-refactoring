@@ -126,5 +126,15 @@ define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], functi
             expect(node).not.toBe(undefined);
         });
 
+        it("assignes container for toolbox when rendered", function() {
+
+            var diagram = new Diagram();
+            diagram.render();
+
+            expect(diagram.toolboxView.container).not.toBe(null);
+            expect(diagram.toolboxView.container).not.toBe(undefined);
+
+        })
+
     });
 });
