@@ -22,6 +22,7 @@ define(['./toolboxGroup'],
             this.__readConfig(cfg || {});
             this.groups = [];
             this.bindEvents();
+            _.bindAll(this, "__elementStartDrag");
         },
 
         __readConfig: function(cfg) {
@@ -100,15 +101,20 @@ define(['./toolboxGroup'],
         },
 
         appendElements: function () {
-            //this.groups = ElementGroupView.initPalette(this.palette, this);
-
             _.invoke(this.groups, "render");
+        },
+
+        __elementStartDrag: function(eventArgs) {
+            _.extend(eventArgs, { toolbox: this });
+            this.trigger("element:drag", eventArgs);
         },
 
         pushGroup: function(elementsGroupView) {
             this.groups.push(elementsGroupView);
             elementsGroupView.updateContainer(this.container);
             this.render();
+
+            this.listenTo(elementsGroupView, "element:drag", this.__elementStartDrag);
         },
 
         setPalette: function(newPalette) {

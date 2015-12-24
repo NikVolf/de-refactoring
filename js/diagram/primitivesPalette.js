@@ -17,10 +17,11 @@ define(['./toolboxGroup', './toolboxElement', '../activity/activity'], function(
     });
 
     Circle.Activity = Activity.extend({
-        initialize: function() {
-            Activity.prototype.initialize.apply(this, {
-                template: '<g class="js-activity-resize-root"><circle x="50" y="50" r="100"></rect></g>'
+        initialize: function(cfg) {
+            _.extend(cfg, {
+                template: '<g class="js-activity-resize-root diagram-activity-circle"><circle class="diagram-activity-circle" cx="50" cy="50" r="100"></rect></g>'
             });
+            Activity.prototype.initialize.apply(this, [cfg]);
         }
     });
 
@@ -29,6 +30,15 @@ define(['./toolboxGroup', './toolboxElement', '../activity/activity'], function(
         this.view = Rectangle.ToolboxElement;
         this.type = "Rectangle";
     };
+
+    Rectangle.Activity = Activity.extend({
+        initialize: function(cfg) {
+            _.extend(cfg, {
+                template: '<g class="js-activity-resize-root"><rect class="diagram-activity-rectangle" x="0" y="0" width="70" height="40"></rect></g>'
+            });
+            Activity.prototype.initialize.apply(this, [cfg]);
+        }
+    });
 
     Rectangle.ToolboxElement = ToolboxElement.extend({
 

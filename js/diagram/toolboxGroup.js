@@ -22,6 +22,7 @@ function (helpers)
             this.id = "abstractGroup1";
 
             this.__readConfig(cfg || {});
+            _.bindAll(this, "__elementStartDrag");
         },
 
         __readConfig: function(cfg) {
@@ -39,8 +40,15 @@ function (helpers)
                 var viewConstructor = element.view;
                 var newView = new viewConstructor(element);
 
+                newView.on("element:drag", this.__elementStartDrag);
+
                 this.views.push(newView);
             }.bind(this));
+        },
+
+        __elementStartDrag: function(eventArgs) {
+            _.extend(eventArgs, { group: this });
+            this.trigger("element:drag", eventArgs);
         },
 
         updateContainer: function(container) {

@@ -9,7 +9,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
 
            expect(_.isFunction(ToolboxView)).toBe(true);
 
-       })
+       });
 
        it("can be created", function() {
            var toolbox = new ToolboxView();
@@ -46,14 +46,14 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
         it("can be redndered", function() {
             var toolbox = new ToolboxView({ container: d3.select(this.containerElement)});
             toolbox.render();
-        })
+        });
 
         it("it renders a container with the rect", function(){
             var toolbox = new ToolboxView({ container: d3.select(this.containerElement)});
             toolbox.render();
 
             expect($("svg > g > rect").length).toBe(1);
-        })
+        });
 
         it("renders all his groups when rendered", function() {
             var toolbox = new ToolboxView({ container: d3.select(this.containerElement)});
@@ -76,7 +76,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
 
             var group = new ToolboxGroup();
 
-            toolbox.pushGroup(group)
+            toolbox.pushGroup(group);
 
             expect(toolbox.render).toHaveBeenCalledTimes(1);
 
@@ -93,7 +93,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
 
             expect(_.isFunction(ToolboxGroup)).toBe(true);
 
-        })
+        });
 
         it("can be created", function() {
             var group = new ToolboxGroup();

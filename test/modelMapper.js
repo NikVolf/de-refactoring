@@ -28,12 +28,12 @@ define(['js/diagram/modelMapper'], function(ModelMapper) {
                 this.isFake = true;
                 this.activityName = testingConstants.fakeActivityName;
             }
-        }
+        };
 
         this.matchModelContainer = function() {
             return testingConstants.fakeHtmlContainerClass;
-        }
-    }
+        };
+    };
 
     describe("Model Mapper", function() {
 

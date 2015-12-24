@@ -8,7 +8,7 @@ define([
     'use strict';
     var titleAreaTemplate = "<div></div>";
 
-    var SelfHostedModel = function() {
+    var SelfHostedModel = function(initialAttributes) {
         this.attributes = {
             position: {
                 x: 0,
@@ -19,16 +19,35 @@ define([
                 height: 80
             }
         };
+
+        this.connectors = [];
+
+        _.extend(this.attributes, initialAttributes);
+
         this.id = this.attributes.id = helpers.getNewId();
         this.get = function(key) {
             return this.attributes[key];
         };
         this.toJSON = function() {
             return JSON.stringify(this.attributes);
+        };
+
+        this.allConnectors = function() {
+            return this.connectors;
+        };
+
+        this.set = function(attributes, val) {
+            if (_.isObject(attributes))
+                _.extend(this.attributes, attributes);
+            else
+            {
+                this.attributes[attributes] = val;
+            }
         }
+
     };
 
-    return Marionette.Object.extend({
+    var Activity = Marionette.Object.extend({
         getElementStub: function () {
             if (this.rootNode)
                 return this.rootNode;
@@ -858,8 +877,8 @@ define([
         },
 
         setVirtualPosition: function (sourceCon, targetCon) {
-            var distance = d3Graphics.helpers.getDistance(targetCon.x0, targetCon.y0, sourceCon.x0, sourceCon.y0);
-            if (distance < d3Graphics.helpers.LinkedDistance)
+            var distance = helpers.getDistance(targetCon.x0, targetCon.y0, sourceCon.x0, sourceCon.y0);
+            if (distance < helpers.LinkedDistance)
                 this.setDrawingPosition(
                     {
                         x: targetCon.x0 - sourceCon.x,
@@ -884,15 +903,14 @@ define([
             else
                 this.setDrawingPosition(position);
 
-            this.virtualCorrection = d3Graphics.helpers.substractPoint(position, this.getPosition());
+            this.virtualCorrection = helpers.substractPoint(position, this.getPosition());
         },
 
         setDraggedEffectivePosition: function (position) {
             var dimensions = this.getDimensions();
             var original = this.isDraggedWithGhost() ? this.ghostPosition : this.getPosition();
             var method = this.isDraggedWithGhost() ? this.updateGhostPosition : this.moveActivity;
-            var newPosition = d3Graphics.helpers.substractPoint(position, original);
-            //d3Graphics.helpers.transformPoint(newPosition, [ - dimensions.width / 2, - dimensions.height / 2  ]);
+            var newPosition = helpers.substractPoint(position, original);
 
             method.apply(this, [newPosition]);
 
@@ -1282,6 +1300,7 @@ define([
                 return;
 
             this.activityG.html(this.handlebarTemplate(this.model));
+            this.appendTemplatedGhost();
         },
 
         getD3ConnectorByIndex: function (index) {
@@ -1331,6 +1350,15 @@ define([
             return false;
         },
 
+        appendTemplatedGhost: function() {
+            if (this.ghostEntity)
+                this.ghostEntity.remove();
+
+            this.ghostEntity = this.ghostG.append("g").attr({ opacity: 0.2 });
+            this.ghostEntity.html(this.handlebarTemplate(this.model));
+            this.ghostPosition && this.setGhostPosition();
+        },
+
         appendGhost: function () {
             var size = this.getDimensions();
 
@@ -1354,7 +1382,7 @@ define([
         },
 
         getId: function () {
-            return this.model.get("id");
+            return this.model.id;
         },
 
         getGlobalId: function() {
@@ -1693,16 +1721,16 @@ define([
             var place = this.getPlacedRect();
 
             if (rect.width && rect.height)
-                return d3Graphics.helpers.doRectsIntersect(rect, place);
-            else return d3Graphics.helpers.doesRectContains(rect, place);
+                return helpers.doRectsIntersect(rect, place);
+            else return helpers.doesRectContains(rect, place);
         },
 
         getParentTranslated: function (primitive) {
-            return d3Graphics.helpers.sumPoints(primitive, this.getPosition());
+            return helpers.sumPoints(primitive, this.getPosition());
         },
 
         getLocalized: function(primitive) {
-            return d3Graphics.helpers.substractPoint(primitive, this.getPosition());
+            return helpers.substractPoint(primitive, this.getPosition());
         },
 
         isOfMetaType: function (metaType) {
@@ -1715,17 +1743,14 @@ define([
 
         getPlacedPosition: function () {
             var rect = this.getPlacedRect();
-            return d3Graphics.helpers.getTransformedPoint(
+            return helpers.getTransformedPoint(
                 [rect.x, rect.y],
                 [rect.width / 2, rect.height / 2]);
         },
 
         getPlacedDraggedPosition: function () {
             var dimensions = this.getDimensions();
-            var effectivePosition = this.isDraggedWithGhost() ? this.ghostPosition : this.getPosition();
-            //return d3Graphics.helpers.getTransformedPoint(effectivePosition, [dimensions.width / 2, dimensions.height / 2]);
-
-            return effectivePosition;
+            return this.isDraggedWithGhost() ? this.ghostPosition : this.getPosition();
         },
 
         cancelDrag: function() {
@@ -1777,4 +1802,9 @@ define([
                 extraOptions || {});
         }
     });
+
+    Activity.SelfHostedModel = SelfHostedModel;
+
+    return Activity;
+
 });

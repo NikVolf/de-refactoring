@@ -110,7 +110,7 @@ define([
         },
 
         __doDragStart: function() {
-            this.trigger("element:drag", this.babyEvent, this)
+            this.trigger("element:drag", this.babyEvent);
         },
 
         showSelection: function () {

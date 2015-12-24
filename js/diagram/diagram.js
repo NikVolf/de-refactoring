@@ -13,6 +13,7 @@
 
 define([
     'd3utils',
+    '../activity/activity',
     './toolbox',
     './selectFrame',
     './modelMapper',
@@ -22,6 +23,7 @@ define([
     'd3'
 
 ], function (helpers,
+             Activity,
              ToolboxView,
              SelectFrameView,
              ModelMapper,
@@ -46,7 +48,20 @@ define([
 
         this.add = function(model) {
             this.models.push(model);
+            return new Activity.SelfHostedModel(model);
         };
+
+        this.postponeUpdates = function() {
+
+        };
+
+        this.resumeUpdates = function() {
+
+        }
+
+        this.remove = function(model) {
+            this.models.slice(_.indexOf(model), 1);
+        }
     };
 
     return Marionette.Object.extend({
@@ -312,8 +327,16 @@ define([
 
         createToolbox: function() {
             this.toolboxView = new ToolboxView({ parent: this });
+
+
+            this.listenTo(this.toolboxView, "element:drag", this.__toolboxElementStartDrag);
+
             this.toolboxView.on('dragStart', this.addActiveType.bind(this));
             this.toolboxView.on("activityTypeClick", this.activityTypeClick.bind(this))
+        },
+
+        __toolboxElementStartDrag: function(eventArgs) {
+            this.addActiveType(eventArgs);
         },
 
         getChildrenSpan: function() {
@@ -1196,7 +1219,15 @@ define([
 
         addTempViewModel: function (model) {
             var self = this;
-            this.draggedViewModel = ModelMapper.createViewByModel(model, self, true);
+
+            var viewConstructor = this.modelMapper.matchModel(model);
+            this.draggedViewModel = new viewConstructor ({ model: model, parent: this });
+
+            this.draggedViewModel.render();
+
+            if (!this.draggedViewModel)
+                throw "View model for " + JSON.stringify(model) + " was not resolved, cannnot create activity";
+
             this.viewModelsHash[this.draggedViewModel.getId()] = this.draggedViewModel;
 
             if (this.draggedViewModel.isOfType("Lane"))
@@ -1427,8 +1458,8 @@ define([
 
         getConnectorsBound: function (viewModel, margin) {
             var bound = {
-                leftUp: d3Graphics.helpers.getPointFromParameter(d3Graphics.helpers.maxVector),
-                rightBottom: d3Graphics.helpers.getPointFromParameter(d3Graphics.helpers.minVector)
+                leftUp: helpers.getPointFromParameter(helpers.maxVector),
+                rightBottom: helpers.getPointFromParameter(helpers.minVector)
             };
 
             this.foreachConnector(function (conCfg) {
@@ -1445,8 +1476,8 @@ define([
                     bound.rightBottom.y = conCfg.y0;
             }, 0, this.draggedViewModel);
 
-            d3Graphics.helpers.transformPoint(bound.leftUp, [ -margin, -margin ]);
-            d3Graphics.helpers.transformPoint(bound.rightBottom, [ margin, margin ]);
+            helpers.transformPoint(bound.leftUp, [ -margin, -margin ]);
+            helpers.transformPoint(bound.rightBottom, [ margin, margin ]);
             return bound;
 
         },
@@ -1679,7 +1710,7 @@ define([
 
             var activitySet = _.chain(this.getSelectedSet());
 
-            var dragDistance = d3Graphics.helpers.substractPoint(
+            var dragDistance = helpers.substractPoint(
                 this.draggedViewModel.getPosition(),
                 this.draggedViewModel.initialDragPosition);
 

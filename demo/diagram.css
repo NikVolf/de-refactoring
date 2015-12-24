@@ -1,5 +1,5 @@
 .js-graphContainer {
-    min-height: 800px;
+    width: 100%;
     height: 100%;
 }
 
@@ -16,4 +16,29 @@
     fill: none;
     stroke: red;
     stroke-width: 1.5;
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.diagram-activity-rectangle {
+    fill: white;
+    stroke: red;
+    stroke-width: 2;
+}
+
+.diagram-activity-circle {
+    fill: white;
+    stroke: blue;
+    stroke-width: 2;
+}
+
+svg {
+    border: 1px solid black;
 }
