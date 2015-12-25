@@ -1,7 +1,14 @@
 /**
  * Created by nvolf on 17.12.2015.
  */
-define(['./toolboxGroup', './toolboxElement', '../activity/activity'], function(ToolboxGroup, ToolboxElement, Activity) {
+define([
+    './toolboxGroup',
+    './toolboxElement',
+    '../activity/activity',
+    '../behaviors/api'
+],
+
+function(ToolboxGroup, ToolboxElement, Activity, behaviors) {
 
     var Circle = function() {
         this.offset = { left: 0, top: 0 };
@@ -33,8 +40,12 @@ define(['./toolboxGroup', './toolboxElement', '../activity/activity'], function(
 
     Rectangle.Activity = Activity.extend({
         initialize: function(cfg) {
+            behaviors.rectangularResizers.setup(this);
+            behaviors.rectangularShapedConnectorSet.setup(this);
             _.extend(cfg, {
-                template: '<g class="js-activity-resize-root"><rect class="diagram-activity-rectangle" x="0" y="0" width="70" height="40"></rect></g>'
+                template: '<g transform="{{dimScale}}"  class="js-activity-resize-root">' +
+                    '<rect class="diagram-activity-rectangle" vector-effect="non-scaling-stroke" x="0" y="0" width="100" height="100"></rect>' +
+                '</g>'
             });
             Activity.prototype.initialize.apply(this, [cfg]);
         }

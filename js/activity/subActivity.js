@@ -12,20 +12,19 @@ function (helpers, d3) {
         },
 
         render: function () {
-            var self = this;
-            var pos = self.parent.getPosition();
+            var pos = this.parent.getPosition();
 
-            if (self.rootNode)
-                self.rootNode.remove();
+            if (this.rootNode)
+                this.rootNode.remove();
 
-            self.rootNode = self.parent.subActivityG.append('g')
+            this.rootNode = this.parent.subActivityG.append('g')
                 .attr('transform', 'translate(' + pos.x + ',' + pos.y + ')')
                 .style({'display': 'none'})
                 .classed({
                     'subActivities': true,
                     'when-selected': true
                 });
-            _.each(self.items, function (item) {
+            _.each(this.items, function (item) {
                 item.render();
             });
         },

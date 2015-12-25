@@ -42,3 +42,23 @@
 svg {
     border: 1px solid black;
 }
+
+.svg-resizer.svg-east-resizer, .svg-resizer.svg-west-resizer {
+    cursor: e-resize;
+}
+
+.svg-resizer.svg-north-resizer, .svg-resizer.svg-south-resizer {
+    cursor: n-resize;
+}
+
+.svg-resizer.svg-north-west-resizer, .svg-resizer.svg-south-east-resizer {
+    cursor: nw-resize;
+}
+
+.svg-resizer.svg-north-east-resizer, .svg-resizer.svg-south-west-resizer {
+    cursor: ne-resize;
+}
+
+.svg-resizer {
+    opacity: 0;
+}

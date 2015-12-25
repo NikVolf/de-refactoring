@@ -69,7 +69,7 @@ define([
         initialize: function (cfg) {
             this.__readConfig(cfg || {});
 
-            this.subActivities = new SubactivityView({ parent: self });
+            this.subActivities = new SubactivityView({ parent: this });
             this.listenTo(this.subActivities, 'subactivitydrag', this.subActivityDrag.bind(this));
 
             this.listenTo(this, 'beforeActivityResize', this.beforeActivityResize.bind(this));
@@ -129,6 +129,7 @@ define([
         syncD3Elements: function() {
             this.setActualDrawingPosition();
             this.setupComponentScale(this.activityG);
+            this.setupComponentScale(this.resizersG);
             this.activityG.selectAll(".js-activity-body").attr({
                 width: this.getDimensions().width,
                 height: this.getDimensions().height
@@ -218,6 +219,7 @@ define([
             this.setEffectiveRect(newPosition, true);
 
             this.setupComponentScale(this.activityG);
+            this.setupComponentScale(this.resizersG);
 
             this.setActualDrawingPosition();
             this.updateFlow();
@@ -522,9 +524,20 @@ define([
         },
 
         __createNodes: function(node) {
+            if (this.activityG)
+                this.activityG.remove();
             this.activityG = node.append('g').classed({'activity-g': true});
+
+            if (this.connectorsG)
+                this.connectorsG.remove();
             this.connectorsG = node.append('g').classed({'connectors-g': true});
+
+            if (this.resizersG)
+                this.resizersG.remove();
             this.resizersG = node.append('g').classed({'resizers-g': true });
+
+            if (this.nodeOverlayG)
+                this.nodeOverlayG.remove();
             this.nodeOverlayG = node.append('g').classed({'node-overlay-g': true });
         },
 
@@ -541,7 +554,7 @@ define([
 
             node.classed(classes);
             node.attr(attributes);
-            node.datum(self);
+            node.datum(this);
 
             this.appendViewItems(node);
             this.ghostEntity && this.setGhostPosition(position);
@@ -1058,13 +1071,12 @@ define([
         },
 
         appendConnectorsNodes: function () {
-            var self = this,
-                connectors = this.connectors = this.getConnectors();
+            var connectors = this.connectors = this.getConnectors();
 
             _.each(connectors, function (connectorCfg) {
-                connectorCfg.parent = self;
-                self.appendConnectorNode(connectorCfg);
-            });
+                connectorCfg.parent = this;
+                this.appendConnectorNode(connectorCfg);
+            }.bind(this));
         },
 
         getCharge: function () {
@@ -1153,7 +1165,7 @@ define([
         },
 
         __appendServiceNodes: function() {
-            this.appendConnectorsNodes(node);
+            this.appendConnectorsNodes();
             this.appendResizers();
             this.appendTitle();
         },
@@ -1299,8 +1311,9 @@ define([
             if (!this.handlebarTemplate)
                 return;
 
-            this.activityG.html(this.handlebarTemplate(this.model));
+            this.activityG.html(this.handlebarTemplate(this.getTemplateHelpers()));
             this.appendTemplatedGhost();
+            this.__appendServiceNodes();
         },
 
         getD3ConnectorByIndex: function (index) {
@@ -1354,8 +1367,13 @@ define([
             if (this.ghostEntity)
                 this.ghostEntity.remove();
 
-            this.ghostEntity = this.ghostG.append("g").attr({ opacity: 0.2 });
-            this.ghostEntity.html(this.handlebarTemplate(this.model));
+            this.ghostEntity = this.ghostG.append("g").attr({ opacity: 0.2 })
+                .style({
+                    'display': this.ghostPosition ? 'block' : 'none'
+                });
+
+            this.ghostPosition && this.setGhostPosition();
+            this.ghostEntity.html(this.handlebarTemplate(this.getTemplateHelpers()));
             this.ghostPosition && this.setGhostPosition();
         },
 

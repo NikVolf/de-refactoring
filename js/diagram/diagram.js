@@ -1222,6 +1222,7 @@ define([
 
             var viewConstructor = this.modelMapper.matchModel(model);
             this.draggedViewModel = new viewConstructor ({ model: model, parent: this });
+            this.draggedViewModel.isTemp = true;
 
             this.draggedViewModel.render();
 
