@@ -5,10 +5,11 @@ define([
     './toolboxGroup',
     './toolboxElement',
     '../activity/activity',
+    '../activity/flow',
     '../behaviors/api'
 ],
 
-function(ToolboxGroup, ToolboxElement, Activity, behaviors) {
+function(ToolboxGroup, ToolboxElement, Activity, FlowView, behaviors) {
 
     var Circle = function() {
         this.offset = { left: 0, top: 0 };
@@ -59,9 +60,25 @@ function(ToolboxGroup, ToolboxElement, Activity, behaviors) {
         }
     });
 
+    var Flow = function() {
+        this.offset = { left: 0, top: 30 };
+        this.view = Flow.ToolboxElement;
+        this.type = "Flow";
+    };
+
+    Flow.ToolboxElement = ToolboxElement.extend({
+        initialize: function() {
+            ToolboxElement.prototype.initialize.apply(this, arguments);
+            this.tpl = Handlebars.compile(
+                '<path d="M0,12L0,47" stroke="#7f7f7f" stroke-width="2"></path>' +
+                '<polygon points="-5,27 0,11 5,27 -5,27" stroke-width="2" fill="#7f7f7f"></polygon>');
+        }
+    });
+
     var modelReference = {
         'Circle': Circle.Activity,
         'Rectangle': Rectangle.Activity,
+        'Flow': FlowView,
 
         matchModel: function(model) {
             return this[model.attributes.type]
@@ -73,6 +90,7 @@ function(ToolboxGroup, ToolboxElement, Activity, behaviors) {
             ToolboxGroup.prototype.initialize.apply(this, arguments);
             this.elements.push(new Circle());
             this.elements.push(new Rectangle());
+            this.elements.push(new Flow());
             this.id = "primitivesGroup";
             this.title = "Primitives"
         }

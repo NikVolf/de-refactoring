@@ -33,7 +33,7 @@ define([
         };
 
         this.allConnectors = function() {
-            return this.connectors;
+            return _.uniq(this.attributes.connectors);
         };
 
         this.set = function(attributes, val) {
@@ -323,6 +323,16 @@ define([
             this.resizeRoot = this.activityG.select(".js-activity-resize-root");
             this.appendTitle();
             this.bindEvents();
+        },
+
+        __pushConnector: function(connector) {
+            var connectors = _.reject(this.model.get("connectors"),
+                _.matches({
+                    targetId: connector.targetId,
+                    targetConnectorIndex: connector.targetConnectorIndex
+                }));
+            connectors.push(connector);
+            this.model.set({ connectors: connectors });
         },
 
         redrawSelectBorder: function () {
@@ -848,7 +858,8 @@ define([
         setConnector: function (cfg) {
             var connector = _.pick(cfg, "ownIndex", "targetConnectorIndex", "targetId");
             connector.targetId || (connector.targetId = cfg.target.getId());
-            this.model.addConnector(connector);
+
+            this.__pushConnector(connector);
 
             this.connectorsUpdated();
         },
@@ -1522,22 +1533,26 @@ define([
         },
 
         showInfoBtnUser: function() {
+            if (!this.infoBtn)
+                return;
+
             clearTimeout(this.activityInfiBtnTimer);
             this.infoBtn.style({'display': 'block'});
             this.showInfoBtn();
         },
 
         hideInfoBtnUser: function(timeout) {
-            var self = this;
+            if (!this.infoBtn)
+                return;
 
             var delayedHide = function () {
-                if (self.parent.activityInfo.isShowingActivity(self.getId()))
+                if (this.parent.activityInfo.isShowingActivity(this.getId()))
                 {
                     this.activityInfiBtnTimer = setTimeout(delayedHide, timeout || 500);
                     return;
                 }
-                self.infoBtn.style({'display': 'none'});
-            };
+                this.infoBtn.style({'display': 'none'});
+            }.bind(this);
 
             this.activityInfiBtnTimer = setTimeout(delayedHide, timeout || 500);
         },

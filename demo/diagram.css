@@ -39,6 +39,14 @@
     stroke-width: 2;
 }
 
+.drag-point-horizontal {
+    cursor: n-resize;
+}
+
+.drag-point-vertical {
+    cursor: e-resize;
+}
+
 svg {
     border: 1px solid black;
 }
@@ -61,4 +69,20 @@ svg {
 
 .svg-resizer {
     opacity: 0;
+}
+
+circle.dev-diagram-connector {
+    fill: #fff;
+    stroke: #64aad0;
+    stroke-width: 1px;
+    opacity: 0;
+}
+
+circle.dev-diagram-connector.dev-diagram-flow-visible {
+    opacity: 1;
+}
+
+circle.dev-diagram-connector.js-diagram-connector-visible.js-diagram-connector-highlighted {
+    fill: #64aad0;
+    opacity: 1;
 }
