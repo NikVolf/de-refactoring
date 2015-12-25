@@ -522,8 +522,8 @@ define([
         },
 
         nullspaceMousedown: function(event) {
-            if (document.activeElement && document.activeElement.tagName &&
-                document.activeElement.tagName.toUpperCase() == 'TEXTAREA')
+            if (window.document.activeElement && window.document.activeElement.tagName &&
+                window.document.activeElement.tagName.toUpperCase() == 'TEXTAREA')
                 return;
 
             if (event.altKey || event.ctrlKey || event.shiftKey) {

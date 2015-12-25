@@ -52,7 +52,7 @@ define([
             if (this.rootNode)
                 return this.rootNode;
 
-            return d3.select(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
+            return d3.select(window.document.createElementNS('http://www.w3.org/2000/svg', 'g'));
         },
 
         __readConfig: function(cfg) {
