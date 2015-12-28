@@ -29,7 +29,7 @@ define([
             return this.attributes[key];
         };
         this.toJSON = function() {
-            return JSON.stringify(this.attributes);
+            return this.attributes;
         };
 
         this.allConnectors = function() {
