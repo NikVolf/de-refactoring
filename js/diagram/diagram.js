@@ -54,12 +54,13 @@ define([
         this.add = function(model) {
             var existing = _.findWhere(this.models, { id: model.id });
             if (existing) {
-                _.extend(existing.attributes, model.attributes)
+                _.extend(existing.attributes, model.attributes);
                 return existing;
             }
             else {
-                this.models.push(model);
-                return new Activity.SelfHostedModel(model);
+                var newModel = new Activity.SelfHostedModel(model);
+                this.models.push(newModel);
+                return newModel;
             }
 
 
