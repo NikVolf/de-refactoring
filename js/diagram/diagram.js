@@ -62,18 +62,13 @@ define([
                 this.models.push(newModel);
                 return newModel;
             }
-
-
-
         };
 
         this.postponeUpdates = function() {
-
         };
 
         this.resumeUpdates = function() {
-
-        }
+        };
 
         this.remove = function(model) {
             this.models.slice(_.indexOf(model), 1);
