@@ -239,7 +239,6 @@ define([
                 this.purge();
 
             _.chain(this.collection.models)
-                .sort(function(a) { return ModelMapper.types[a.get("type")].layer || 0 })
                 .each(function(activityModel) {
                     if (this.isActivityModelInScope(activityModel))
                         this.addNewActivity(activityModel.attributes);
