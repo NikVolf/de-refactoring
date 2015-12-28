@@ -47,7 +47,9 @@ define([
         this.models = [];
 
         if (initialModels)
-            this.models = _.uniq(initialModels);
+            this.models = _.map(initialModels, function(initialModel) {
+                return new Activity.SelfHostedModel(initialModel)
+            })
 
         this.add = function(model) {
             this.models.push(model);
