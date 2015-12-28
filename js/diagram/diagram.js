@@ -52,8 +52,18 @@ define([
             })
 
         this.add = function(model) {
-            this.models.push(model);
-            return new Activity.SelfHostedModel(model);
+            var existing = _.findWhere(this.models, { id: model.id });
+            if (existing) {
+                _.extend(existing.attributes, model.attributes)
+                return existing;
+            }
+            else {
+                this.models.push(model);
+                return new Activity.SelfHostedModel(model);
+            }
+
+
+
         };
 
         this.postponeUpdates = function() {
@@ -250,7 +260,7 @@ define([
 
         isActivityModelInScope: function(activityModel) {
             return (!this.activeEmbeddedProcessId && !activityModel.get("ownerEmbeddedProcessActivityId") ||
-                this.activeEmbeddedProcessId == activityModel.get("ownerEmbeddedProcessActivityId"))
+            this.activeEmbeddedProcessId == activityModel.get("ownerEmbeddedProcessActivityId"))
         },
 
         scopeToContainActivityModel: function(activityModel) {
@@ -312,7 +322,7 @@ define([
             this.invokeForIds(effectiveIds, function() {
                 this.validate();
                 this.model.get("ownerEmbeddedProcessActivityId") &&
-                    extraIds.push(this.model.get("ownerEmbeddedProcessActivityId"));
+                extraIds.push(this.model.get("ownerEmbeddedProcessActivityId"));
             });
 
             if (extraIds && extraIds.length > 0)
@@ -333,7 +343,7 @@ define([
                     else
                         vm[fnOther].apply(vm, paramsOther || []);
                 }
-        });
+            });
 
         },
 
@@ -1439,13 +1449,13 @@ define([
                 })
                 .indexBy("layer")
                 .some(
-                    function (viewModel) {
-                        viewModel.trigger('dragOver', eventArgs);
-                        if (eventArgs.stop)
-                            currentDragOwner = eventArgs.owner || viewModel;
+                function (viewModel) {
+                    viewModel.trigger('dragOver', eventArgs);
+                    if (eventArgs.stop)
+                        currentDragOwner = eventArgs.owner || viewModel;
 
-                        return eventArgs.stop;
-                    });
+                    return eventArgs.stop;
+                });
 
             if (this.lastDragOwner && currentDragOwner != this.lastDragOwner)
                 this.lastDragOwner.trigger("dragOverLeave", eventArgs);
@@ -1512,8 +1522,8 @@ define([
             this.foreachConnector(function (conCfg) {
                 var inbound =
                     (conCfg.x0 > bound.leftUp.x && conCfg.x0 < bound.rightBottom.x &&
-                        conCfg.y0 > bound.leftUp.y && conCfg.y0 < bound.rightBottom.y) &&
-                        conCfg.parent != self.draggedViewModel;
+                    conCfg.y0 > bound.leftUp.y && conCfg.y0 < bound.rightBottom.y) &&
+                    conCfg.parent != self.draggedViewModel;
 
                 if (!inbound)
                     return;
@@ -1970,9 +1980,9 @@ define([
                 result.push(activity);
                 _.each(activity.getLinkedActivities(), function(linked) {
                     if (_.every(linked.getLinkedIds(),
-                        function(id) {
-                            return selectedIds.indexOf(id) >= 0;
-                        })) result.push(linked);
+                            function(id) {
+                                return selectedIds.indexOf(id) >= 0;
+                            })) result.push(linked);
                 });
             });
 
