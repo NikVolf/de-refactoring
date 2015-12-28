@@ -24,7 +24,11 @@ define([
 
         _.extend(this.attributes, initialAttributes);
 
-        this.id = this.attributes.id = helpers.getNewId();
+        if (initialAttributes.id)
+            this.id = initialAttributes.id;
+        else
+            this.id = this.attributes.id = helpers.getNewId();
+
         this.get = function(key) {
             return this.attributes[key];
         };
