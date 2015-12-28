@@ -105,6 +105,9 @@ define([
             this.container = cfg.container;
 
             this.size = cfg.size || { width: "800px", height: "600px" };
+
+            this.toolboxWidth = cfg.toolboxWidth;
+            this.toolboxHeight = cfg.toolboxHeight;
         },
 
         __createContainers: function(cfg) {
@@ -326,7 +329,7 @@ define([
         },
 
         createToolbox: function() {
-            this.toolboxView = new ToolboxView({ parent: this });
+            this.toolboxView = new ToolboxView({ parent: this, width: this.toolboxWidth, height: this.toolboxHeight });
 
 
             this.listenTo(this.toolboxView, "element:drag", this.__toolboxElementStartDrag);

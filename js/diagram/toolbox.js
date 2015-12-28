@@ -23,11 +23,15 @@ define(['./toolboxGroup'],
             this.groups = [];
             this.bindEvents();
             _.bindAll(this, "__elementStartDrag");
+
         },
 
         __readConfig: function(cfg) {
             this.container = cfg.container || (cfg.parent && cfg.parent.toolboxContainer);
             this.palette = cfg.palette || 'default';
+            cfg.width && (this.width = cfg.width);
+            cfg.height && (this.height = cfg.height);
+
         },
 
         width: 90,
