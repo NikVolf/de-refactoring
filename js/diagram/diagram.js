@@ -43,8 +43,11 @@ define([
         '</linearGradient> ' +
         '</defs>';
 
-    var SelfHostedCollection = function() {
+    var SelfHostedCollection = function(initialModels) {
         this.models = [];
+
+        if (initialModels)
+            this.models = _.uniq(initialModels);
 
         this.add = function(model) {
             this.models.push(model);
@@ -214,6 +217,16 @@ define([
             this.$el.remove();
 
             this.trigger("destroy");
+        },
+
+        setCollection: function(collection) {
+            if (_.isArray(collection))
+                this.collection = new SelfHostedCollection(collection);
+
+            else
+                this.collection = collection;
+
+            this.updateFromCollection();
         },
 
         updateFromCollection: function() {
