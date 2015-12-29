@@ -10,8 +10,14 @@ define(['d3'],  function (d3) {
     var d3DesignerHelpers = {};
 
     d3DesignerHelpers.getNewId = function () {
+        var randomValues = new Uint8Array(36);
+        crypto.getRandomValues(randomValues);
+        var index = 0;
+
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            var r = (randomValues[index]/16) | 0;
+            var v = c === 'x' ? r : (r & 0x3 | 0x8);
+            index ++;
             return v.toString(16);
         });
     };
