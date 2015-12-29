@@ -11,9 +11,9 @@
 
 /* global define, require, Handlebars, Marionette, classes */
 
-define(['./toolboxGroup'],
+define(['d3utils', './toolboxGroup'],
 
-    function (ElementGroupView) {
+    function (helpers, ElementGroupView) {
 
     'use strict';
 
@@ -24,6 +24,7 @@ define(['./toolboxGroup'],
             this.bindEvents();
             _.bindAll(this, "__elementStartDrag");
 
+            this.scroll = { x: 0, y: 0 };
         },
 
         __readConfig: function(cfg) {
@@ -75,6 +76,10 @@ define(['./toolboxGroup'],
 
             this.container.selectAll("*").remove();
 
+            this.$el = $(this.container.node());
+
+            this.$el.on("mousewheel DOMMouseScroll", this.mouseWheel.bind(this));
+
             this.container.append('rect').attr({
                 x: 0,
                 y: 0,
@@ -102,6 +107,16 @@ define(['./toolboxGroup'],
             });
 
             this.appendElements();
+        },
+
+        mouseWheel: function(event) {
+            var delta = [event.originalEvent.wheelDeltaX, event.originalEvent.wheelDeltaY];
+            helpers.transformPoint(this.scroll, delta, [0.0, 0.15]);
+            if (this.scroll.y > 0) this.scroll.y = 0;
+            this.container.attr(helpers.getTranslationAttribute(this.scroll));
+
+            event.stopPropagation();
+            event.preventDefault();
         },
 
         appendElements: function () {
