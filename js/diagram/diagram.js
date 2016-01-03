@@ -987,7 +987,6 @@ define([
             this.scale = scale;
 
             if (Math.abs(originalScale - newScale) > 0.0001) {
-
                 // idea is what was under mouse before zoom, should stay under mouse after zoom
                 // so client = (p + s) * z and client = (p + s') * z'   (/ from reversed clientToContainer transform) /)
                 // -> (p + s) * z = (p + s') * z'
@@ -1089,28 +1088,26 @@ define([
         },
 
         existingActivityDrag: function (e) {
-            var self = this;
-
             if (this.isReadOnly || e.sourceActivity.isDragDisabled()) {
-                self.beginScroll({ clientX: e.startX, clientY: e.startY });
+                this.beginScroll({ clientX: e.startX, clientY: e.startY });
                 return;
             }
 
-            self.draggedViewModel = e.sourceActivity;
+            this.draggedViewModel = e.sourceActivity;
 
-            if (self.getSelectedSet().indexOf(self.draggedViewModel) == -1)
-                self.selected = [self.draggedViewModel];
+            if (this.getSelectedSet().indexOf(this.draggedViewModel) == -1)
+                this.selected = [this.draggedViewModel];
 
-            self.unbindMouseenterEvents();
+            this.unbindMouseenterEvents();
 
-            self.isDragConsumated = false;
+            this.isDragConsumated = false;
 
-            self.startDrag = helpers.getPointFromParameter([e.startX, e.startY]);
+            this.startDrag = helpers.getPointFromParameter([e.startX, e.startY]);
 
             this.collection.postponeUpdates();
 
-            self.$el.on('mousemove', self.dragIt.bind(self));
-            self.$el.on('mouseup', self.onMouseUp.bind(self));
+            this.$el.on('mousemove', this.dragIt.bind(this));
+            this.$el.on('mouseup', this.onMouseUp.bind(this));
 
         },
 
@@ -1202,7 +1199,7 @@ define([
             this.trigger("layersRecreated");
         },
 
-        disabledPoint: { x: 60, y: 0},
+        disabledPoint: { x: 60, y: 0 },
 
         getViewModelById: function (id) {
             var visibleViewModel = this.viewModelsHash[id];
@@ -1559,8 +1556,10 @@ define([
 
         getConnectorsIntersect: function (c1, c2) {
             var dist = Math.sqrt((c1.x0 - c2.x0) * (c1.x0 - c2.x0) + (c1.y0 - c2.y0) * (c1.y0 - c2.y0));
-            return  {linked: dist,
-                nearest: dist < 100};
+            return  {
+                linked: dist,
+                nearest: dist < 100
+            };
         },
 
         foreachConnector: function (fn, desiredCharge, viewModel) {

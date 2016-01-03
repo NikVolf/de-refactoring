@@ -5,6 +5,7 @@ define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], functi
 
     var testSettings = {
         fakeId1: "id.fake.1",
+        fakeId2: "id.fake.2",
         randomActivityType: "rectangle", // guarantee to be random
         primitiveActivityTemplate: '<g class="js-activity-resize-root"><rect x=0 y=0 width=100 height=100></rect></g>',
         primitiveActivityTemplateWithId: '<g class="js-activity-resize-root" id="{{id}}"><rect x=0 y=0 width=100 height=100></rect></g>',
@@ -29,6 +30,12 @@ define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], functi
 
     var newTemplatedActivity = function() {
         return new Activity({ template: testSettings.primitiveActivityTemplate });
+    };
+
+    var FakeActivity = function() {
+        this.isFake = true;
+        this.getId = function() { return testSettings.fakeId2 };
+
     };
 
 
@@ -73,7 +80,19 @@ define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], functi
 
             expect(activity.render).toHaveBeenCalled();
 
-        })
+        });
+
+        it("can add activity via model given the model mapper is ok", function() {
+            var diagram = new Diagram();
+
+            spyOn(diagram.modelMapper, "matchModel").and.returnValue(FakeActivity);
+
+            var activity = diagram.addNewActivityViaModel({ type: "dummy"});
+
+            expect(diagram.viewModels.length).toBe(1);
+        });
+
+
 
     });
 
