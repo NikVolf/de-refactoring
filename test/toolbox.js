@@ -43,7 +43,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
             delete this.containerElement;
         });
 
-        it("can be redndered", function() {
+        it("can be rendered", function() {
             var toolbox = new ToolboxView({ container: d3.select(this.containerElement)});
             toolbox.render();
         });
@@ -84,6 +84,14 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
 
     });
 
+    function getElementConstructorSpy () {
+
+        var elementConstructorSpy = jasmine.createSpy("group element constructor spy");
+        elementConstructorSpy.and.returnValue({ on: jasmine.createSpy("event handler")});
+
+        return elementConstructorSpy;
+    }
+
     describe("Toobox groups", function() {
 
         it("has a valid module", function() {
@@ -105,8 +113,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
 
         it("can create element views if any specified", function() {
             var group = new ToolboxGroup();
-
-            var elementConstructorSpy = jasmine.createSpy("group element constructor spy");
+            var elementConstructorSpy = getElementConstructorSpy();
 
             group.elements.push({
                 view: elementConstructorSpy
@@ -119,7 +126,7 @@ define(['js/diagram/toolbox', 'js/diagram/toolboxGroup', './renderHelpers'], fun
 
         it("passes the configured options to the created element view", function() {
             var group = new ToolboxGroup();
-            var elementConstructorSpy = jasmine.createSpy("group element constructor spy");
+            var elementConstructorSpy = getElementConstructorSpy();
 
             group.elements.push({
                 view: elementConstructorSpy,

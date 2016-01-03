@@ -22,11 +22,14 @@ define([
 
         this.connectors = [];
 
-        _.extend(this.attributes, initialAttributes);
+        if (initialAttributes) {
+            _.extend(this.attributes, initialAttributes);
 
-        if (initialAttributes.id)
-            this.id = initialAttributes.id;
-        else
+            if (initialAttributes.id)
+                this.id = initialAttributes.id;
+        }
+
+        if (!this.id)
             this.id = this.attributes.id = helpers.getNewId();
 
         this.get = function(key) {
