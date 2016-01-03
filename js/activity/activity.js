@@ -79,16 +79,36 @@ define([
             this.subActivities = new SubactivityView({ parent: this });
             this.listenTo(this.subActivities, 'subactivitydrag', this.subActivityDrag.bind(this));
 
-            this.listenTo(this, 'beforeActivityResize', this.beforeActivityResize.bind(this));
-            this.listenTo(this, 'beforeUpdateSize', this.beforeUpdateSize.bind(this));
-            this.listenTo(this, 'finishResize', this.onfinishResize.bind(this));
-            this.listenTo(this, 'startDrag', this.startDrag.bind(this));
-            this.listenTo(this, 'finishDrag', this.onFinishDrag.bind(this));
-
             this.debounceInitializeDrag = helpers.getDebouncedHandler(this.initializeDrag, 100, this);
 
             if (!this.isHidden)
                 this.render();
+        },
+
+        __doBeforeActivityResize: function(size) {
+            this.beforeActivityResize();
+            this.trigger("before:resize", size);
+
+        },
+
+        __doBeforeUpdateSize: function(size) {
+            this.beforeUpdateSize(size);
+            this.trigger("before:updateSize", size);
+        },
+
+        __doFinishResize: function() {
+            this.onfinishResize();
+            this.trigger("finish:resize");
+        },
+
+        __doStartDrag: function() {
+            this.startDrag();
+            this.trigger("start:drag");
+        },
+
+        __doFinishDrag: function(e) {
+            this.onFinishDrag(e);
+            this.trigger("finish:drag");
         },
 
         isNeedInfoBtn: false,
@@ -221,7 +241,7 @@ define([
                 height: place.height + delta.y * this.resizeVector.y
             };
 
-            this.trigger('beforeUpdateSize', newPosition);
+            this.__doBeforeActivityResize(newPosition);
 
             this.setEffectiveRect(newPosition, true);
 
@@ -245,7 +265,7 @@ define([
                 height: this.ghostHeight + delta.y * this.resizeVector.y
             };
 
-            this.trigger('beforeUpdateSize', newPosition);
+            this.__doBeforeUpdateSize(newPosition);
 
             this.ghostPosition = { x: newPosition.x, y: newPosition.y };
             this.setGhostPosition();
@@ -780,8 +800,6 @@ define([
             }
 
             this.select(true);
-
-
         },
 
         activityOnclick: function () {

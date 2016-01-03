@@ -49,7 +49,7 @@ define([
         if (initialModels)
             this.models = _.map(initialModels, function(initialModel) {
                 return new Activity.SelfHostedModel(initialModel)
-            })
+            });
 
         this.add = function(model) {
             var existing = _.findWhere(this.models, { id: model.id });
@@ -685,7 +685,7 @@ define([
 
             this.startDrag = helpers.getPointFromParameter([e.startX, e.startY]);
 
-            this.resizedActivity.trigger('beforeActivityResize');
+            this.resizedActivity.beforeActivityResize();
             this.unbindMouseenterEvents();
 
             this.collection.postponeUpdates();
@@ -711,7 +711,7 @@ define([
             this.$el.unbind('mousemove');
             this.$el.unbind('mouseup');
 
-            this.resizedActivity.trigger('finishResize');
+            this.resizedActivity.onfinishResize();
 
             this.currentCommand && this.currentCommand.captureNewState([this.resizedActivity]);
 
@@ -1384,7 +1384,7 @@ define([
             this.draggedViewModel.initialDragPosition = this.draggedViewModel.getPosition();
 
             this.eachSelectedAndDragged(function(selected) {
-                selected.trigger('startDrag', event);
+                selected.startDrag(event);
             });
 
             !this.draggedViewModel.isTemp && this.pushUpdatedObjectsHistory(this.getSelectedSet());
@@ -1820,8 +1820,7 @@ define([
             var isGroupMove = eachSelectedAndDragged.value().length > 1;
 
             eachSelectedAndDragged.invoke(
-                "trigger",
-                "finishDrag",
+                "onFinishDrag",
                 {
                     isLinked: self.linked,
                     isGroupMove: isGroupMove
