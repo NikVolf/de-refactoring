@@ -1,14 +1,3 @@
-/**
- * Developer: Nikolay Volf
- * Date: 15/10/2014
- * Copyright: 2009-2014 Comindware®
- *       All Rights Reserved
- *
- * THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF Comindware
- *       The copyright notice above does not evidence any
- *       actual or intended publication of such source code.
- */
-
 define(['d3utils'],
 
 function (helpers) {

@@ -1,5 +1,3 @@
-/* global define, require, Handlebars, Marionette, classes */
-
 define(['d3utils', 'd3'],
 
 function (helpers, d3) {

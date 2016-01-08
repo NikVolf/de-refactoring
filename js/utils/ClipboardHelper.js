@@ -1,7 +1,3 @@
-/**
- * Created by nvolf on 31.03.2015.
- */
-
 define(['./UndoRedoHelper'], function(UndoRedoHelper) {
 
     return function(diagram) {

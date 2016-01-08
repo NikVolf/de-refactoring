@@ -1,7 +1,3 @@
-/**
- * Created by nvolf on 28.07.2015.
- */
-
 define([], function() {
 
     'use strict';

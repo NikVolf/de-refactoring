@@ -1,7 +1,3 @@
-/**
- * Created by nvolf on 06.08.2015.
- */
-
 define([
     './MountSurface',
     './TemplatedSelectBorder',

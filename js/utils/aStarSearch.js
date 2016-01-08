@@ -1,9 +1,3 @@
-/**
- * Created by Nikolay Volf on 14.02.2015.
- * A* infinite graph search
- * just perfect for arrow layout
- */
-
 define([], function() {
     var end = { x: 340, y: 50 };
 

@@ -1,6 +1,3 @@
-/**
- * Created by nvolf on 17.12.2015.
- */
 define([
     './toolboxGroup',
     './toolboxElement',
