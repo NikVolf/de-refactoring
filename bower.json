@@ -22,6 +22,11 @@
     "tests"
   ],
   "dependencies": {
-    "handlebars": "~4.0.5"
+    "handlebars": "~4.0.5",
+    "jquery": "~2.1.4",
+    "underscore": "~1.8.3",
+    "backbone": "~1.2.3",
+    "backbone.marionette": "marionette#~2.4.4",
+    "d3": "~3.5.12"
   }
 }
